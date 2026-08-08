@@ -11,67 +11,22 @@ export const metadata: Metadata = {
 /* ------------------------------------------------------------------ */
 
 /* ------------------------------------------------------------------ */
-/* Atlas brand logo — recreated as inline SVG from the reference image   */
-/* 3D "A" with blue front face, silver side face, purple edge,          */
-/* blue swoosh, and inner triangle. No external image.                  */
+/* Atlas brand logo — image officielle, identique à celle de           */
+/* l'application (`/opt/atlas-engine/public/atlas-mark.png`).          */
+/* L'ancien SVG « recréé de mémoire » divergeait du vrai monogramme,   */
+/* d'où le passage au fichier source partagé.                          */
 /* ------------------------------------------------------------------ */
 
 function AtlasMark({ className = "h-6 w-6" }: { className?: string }) {
   return (
-    <svg
-      viewBox="0 0 100 100"
-      className={className}
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/atlas-mark.png"
+      alt=""
       aria-hidden="true"
-      fill="none"
-    >
-      <defs>
-        <linearGradient id="atlasFaceBlue" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#5cb0ff" />
-          <stop offset="50%" stopColor="#3a86f5" />
-          <stop offset="100%" stopColor="#2456db" />
-        </linearGradient>
-        <linearGradient id="atlasFaceSilver" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#f8fafc" />
-          <stop offset="55%" stopColor="#d4d4d8" />
-          <stop offset="100%" stopColor="#71717a" />
-        </linearGradient>
-        <linearGradient id="atlasEdgePurple" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#818cf8" />
-          <stop offset="100%" stopColor="#4338ca" />
-        </linearGradient>
-        <linearGradient id="atlasSwoosh" x1="0" y1="0" x2="1" y2="0.4">
-          <stop offset="0%" stopColor="#60a5fa" />
-          <stop offset="100%" stopColor="#3b82f6" />
-        </linearGradient>
-        <linearGradient id="atlasInnerTri" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#4a9eff" />
-          <stop offset="100%" stopColor="#2563eb" />
-        </linearGradient>
-      </defs>
-
-      <g transform="translate(50 50)">
-        {/* Left face — blue, front-facing */}
-        <path d="M -32 32 L 0 -34 L 0 32 Z" fill="url(#atlasFaceBlue)" />
-
-        {/* Right face — silver, side-facing */}
-        <path d="M 0 -34 L 32 32 L 0 32 Z" fill="url(#atlasFaceSilver)" />
-
-        {/* Purple 3D edge on the right */}
-        <path d="M 32 32 L 32 26 L 5 32 Z" fill="url(#atlasEdgePurple)" />
-
-        {/* Swoosh — curved blue ribbon */}
-        <path
-          d="M -30 10 Q -12 -6 18 -2 Q 28 0 32 5"
-          fill="none"
-          stroke="url(#atlasSwoosh)"
-          strokeWidth="3"
-          strokeLinecap="round"
-        />
-
-        {/* Inner triangle — blue, in front of swoosh */}
-        <path d="M -10 18 L 0 0 L 10 18 Z" fill="url(#atlasInnerTri)" />
-      </g>
-    </svg>
+      draggable={false}
+      className={`${className} object-contain select-none`}
+    />
   );
 }
 

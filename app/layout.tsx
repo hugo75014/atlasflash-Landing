@@ -40,17 +40,15 @@ export const metadata: Metadata = {
       "Atlas orchestre automatiquement les meilleurs fournisseurs d'IA. Une seule clé, un seul endpoint, tout le catalogue.",
   },
   icons: {
+    // Mêmes fichiers que l'application (copiés de /opt/atlas-engine/public) :
+    // un favicon SVG reprendrait la priorité et réafficherait l'ancien glyphe,
+    // donc on s'en tient au raster.
     icon: [
-      {
-        url:
-          "data:image/svg+xml;utf8," +
-          encodeURIComponent(
-            '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 100 100"><defs><linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5cb0ff"/><stop offset="50%" stop-color="#3a86f5"/><stop offset="100%" stop-color="#2456db"/></linearGradient><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f8fafc"/><stop offset="55%" stop-color="#d4d4d8"/><stop offset="100%" stop-color="#71717a"/></linearGradient><linearGradient id="p" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#4338ca"/></linearGradient><linearGradient id="sw" x1="0" y1="0" x2="1" y2="0.4"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient><linearGradient id="i" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4a9eff"/><stop offset="100%" stop-color="#2563eb"/></linearGradient></defs><g transform="translate(50 50)"><path d="M-32 32 L0-34 L0 32 Z" fill="url(%23b)"/><path d="M0-34 L32 32 L0 32 Z" fill="url(%23s)"/><path d="M32 32 L32 26 L5 32 Z" fill="url(%23p)"/><path d="M-30 10 Q-12-6 18-2 Q28 0 32 5" fill="none" stroke="url(%23sw)" stroke-width="3" stroke-linecap="round"/><path d="M-10 18 L0 0 L10 18 Z" fill="url(%23i)"/></g></svg>'
-          ),
-        type: "image/svg+xml",
-        sizes: "any",
-      },
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
+      { url: "/icon-512.png", type: "image/png", sizes: "512x512" },
     ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
   },
 };
 

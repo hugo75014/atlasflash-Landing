@@ -35,3 +35,6 @@ yarn-error.log*
 
 # reference materials (not part of the build)
 attachments/
+
+# Local Netlify folder
+.netlify
