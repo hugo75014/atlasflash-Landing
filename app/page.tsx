@@ -291,28 +291,6 @@ function SchemaDiagram() {
         <pattern id="dotGrid" width="22" height="22" patternUnits="userSpaceOnUse">
           <circle cx="1" cy="1" r="1" style={{ fill: "rgb(var(--ink-200))" }} />
         </pattern>
-        <linearGradient id="schemaAtlasBlue" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#5cb0ff" />
-          <stop offset="50%" stopColor="#3a86f5" />
-          <stop offset="100%" stopColor="#2456db" />
-        </linearGradient>
-        <linearGradient id="schemaAtlasSilver" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#f8fafc" />
-          <stop offset="55%" stopColor="#d4d4d8" />
-          <stop offset="100%" stopColor="#71717a" />
-        </linearGradient>
-        <linearGradient id="schemaAtlasPurple" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#818cf8" />
-          <stop offset="100%" stopColor="#4338ca" />
-        </linearGradient>
-        <linearGradient id="schemaAtlasSwoosh" x1="0" y1="0" x2="1" y2="0.4">
-          <stop offset="0%" stopColor="#60a5fa" />
-          <stop offset="100%" stopColor="#3b82f6" />
-        </linearGradient>
-        <linearGradient id="schemaAtlasInner" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#4a9eff" />
-          <stop offset="100%" stopColor="#2563eb" />
-        </linearGradient>
       </defs>
 
       {/* Background grid */}
@@ -373,20 +351,17 @@ function SchemaDiagram() {
           fill="url(#atlasGlow)"
           style={{ stroke: "rgb(var(--ink-900))" }}
         />
-        {/* mini Atlas logo badge (top-left of the box) */}
-        <g transform="translate(255 150)">
-          <path d="M -11 11 L 0 -11 L 0 11 Z" fill="url(#schemaAtlasBlue)" />
-          <path d="M 0 -11 L 11 11 L 0 11 Z" fill="url(#schemaAtlasSilver)" />
-          <path d="M 11 11 L 11 9 L 2 11 Z" fill="url(#schemaAtlasPurple)" />
-          <path
-            d="M -10 3.5 Q -4 -2 6 -0.5 Q 9 0.5 11 2"
-            fill="none"
-            stroke="url(#schemaAtlasSwoosh)"
-            strokeWidth="1.1"
-            strokeLinecap="round"
-          />
-          <path d="M -3.5 6 L 0 0 L 3.5 6 Z" fill="url(#schemaAtlasInner)" />
-        </g>
+        {/* mini Atlas logo badge (top-left of the box) — même fichier que le
+            reste du site ; le <image> garde le badge dans le SVG du schéma,
+            centré comme avant sur (255 150). */}
+        <image
+          href="/atlas-mark.png"
+          x="242"
+          y="137"
+          width="26"
+          height="26"
+          preserveAspectRatio="xMidYMid meet"
+        />
         {/* ATLAS wordmark next to the mini logo */}
         <text
           x="278"
