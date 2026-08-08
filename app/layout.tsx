@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://app.atlasflash.com"),
+  metadataBase: new URL("https://www.atlasflash.com"),
   title: {
     default: "Atlas — Une seule API. Des centaines de modèles IA. Gratuit d'abord.",
     template: "%s | Atlas",
@@ -23,10 +23,11 @@ export const metadata: Metadata = {
   creator: "Atlas",
   publisher: "Atlas",
   robots: { index: true, follow: true },
+  alternates: { canonical: "https://www.atlasflash.com/" },
   openGraph: {
     type: "website",
     locale: "fr_FR",
-    url: "https://app.atlasflash.com",
+    url: "https://www.atlasflash.com",
     siteName: "Atlas",
     title: "Atlas — Une seule API. Des centaines de modèles IA. Gratuit d'abord.",
     description:
