@@ -1,0 +1,162 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Hide the platform watermark injected at runtime */
+#minimax-floating-ball,
+#minimax-floating-ball * {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+    /* warm cream gradient — light mode */
+    --bg-start: 255 245 238;   /* #fff5ee — pale peach */
+    --bg-mid: 255 250 242;     /* #fffaf2 — soft cream */
+    --bg-end: 254 245 227;     /* #fef5e3 — warm cream */
+    --bg: 255 248 240;         /* fallback solid */
+    --surface: 255 255 255;    /* pure white cards */
+    --surface-2: 254 251 247;  /* subtle warm tint */
+    --ink-50: 250 250 250;
+    --ink-100: 244 244 245;
+    --ink-200: 228 228 231;
+    --ink-300: 212 212 216;
+    --ink-400: 161 161 170;
+    --ink-500: 113 113 122;
+    --ink-600: 82 82 91;
+    --ink-700: 63 63 70;
+    --ink-800: 39 39 42;
+    --ink-900: 24 24 27;
+    --ink-950: 9 9 11;
+    --accent: 9 9 11;
+    --accent-text: 255 255 255;
+    --ring: 9 9 11;
+  }
+
+  .dark {
+    color-scheme: dark;
+    /* dark gray (not black) — dark mode */
+    --bg-start: 26 26 26;      /* #1a1a1a */
+    --bg-mid: 30 30 30;        /* #1e1e1e */
+    --bg-end: 24 24 24;        /* #181818 */
+    --bg: 26 26 26;            /* solid fallback */
+    --surface: 35 35 35;       /* #232323 — cards, slightly lifted */
+    --surface-2: 32 32 32;     /* #202020 — subtle section */
+    --ink-50: 26 26 26;
+    --ink-100: 35 35 35;
+    --ink-200: 47 47 47;
+    --ink-300: 64 64 64;
+    --ink-400: 113 113 122;
+    --ink-500: 161 161 170;
+    --ink-600: 212 212 216;
+    --ink-700: 228 228 232;
+    --ink-800: 244 244 245;
+    --ink-900: 250 250 250;
+    --ink-950: 255 255 255;
+    --accent: 250 250 250;
+    --accent-text: 9 9 11;
+    --ring: 250 250 250;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply text-ink-900 font-sans antialiased;
+    background:
+      linear-gradient(135deg,
+        rgb(var(--bg-start)) 0%,
+        rgb(var(--bg-mid)) 45%,
+        rgb(var(--bg-end)) 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    font-feature-settings: "ss01", "cv11";
+    transition: background-color 200ms ease, color 200ms ease, background-image 200ms ease;
+  }
+
+  ::selection {
+    background: rgb(var(--ink-900));
+    color: rgb(var(--surface));
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-ink-900 ring-offset-2;
+    --tw-ring-offset-color: rgb(var(--bg-mid));
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-[1200px] px-5 sm:px-6 lg:px-8;
+  }
+
+  .h-display {
+    @apply text-[2.75rem] leading-[1.05] tracking-tightest font-medium sm:text-6xl lg:text-[4.25rem];
+  }
+
+  .h-section {
+    @apply text-3xl leading-[1.1] tracking-tight font-medium sm:text-4xl lg:text-[2.75rem];
+  }
+
+  .h-eyebrow {
+    @apply text-xs font-medium uppercase tracking-[0.18em] text-ink-500;
+  }
+
+  .text-body {
+    @apply text-[15px] leading-[1.65] text-ink-600 sm:text-base;
+  }
+
+  .text-lead {
+    @apply text-base leading-[1.6] text-ink-600 sm:text-lg;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-medium transition-colors duration-150 ease-out;
+  }
+
+  .btn-primary {
+    @apply btn bg-ink-950 text-white hover:bg-ink-800 dark:bg-ink-50 dark:text-ink-950 dark:hover:bg-ink-100;
+  }
+
+  .btn-secondary {
+    @apply btn border border-ink-200 bg-surface text-ink-900 hover:bg-ink-50 dark:border-ink-200 dark:bg-surface dark:text-ink-900 dark:hover:bg-ink-100;
+  }
+
+  .card {
+    @apply rounded-xl border border-ink-200 bg-surface;
+  }
+
+  .card-soft {
+    @apply rounded-xl border border-ink-200 bg-ink-50/40 dark:bg-ink-100/60;
+  }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(to right, rgb(var(--ink-900) / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(var(--ink-900) / 0.05) 1px, transparent 1px);
+    background-size: 56px 56px;
+    background-position: -1px -1px;
+  }
+
+  .ring-soft {
+    box-shadow: inset 0 0 0 1px rgb(var(--ink-900) / 0.04);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+}
