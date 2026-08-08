@@ -1,6 +1,4 @@
 /** @type {import('next').NextConfig} */
-const repoName = "atlasflash-Landing";
-
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
@@ -8,8 +6,6 @@ const nextConfig = {
   productionBrowserSourceMaps: false,
   output: "export",
   trailingSlash: true,
-  basePath: `/${repoName}`,
-  assetPrefix: `/${repoName}`,
   images: { unoptimized: true },
 };
 
