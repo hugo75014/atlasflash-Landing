@@ -16,3 +16,15 @@
   for = "/_next/static/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# L'export statique ecrit l'image Open Graph dans un fichier SANS extension
+# (out/opengraph-image). Netlify deduit le type MIME de l'extension : sans
+# elle, il sert application/octet-stream. Comme X-Content-Type-Options=nosniff
+# est applique a /*, aucun client ne peut rattraper le coup en devinant, et
+# les robots de Facebook / LinkedIn / X / Slack rejettent la reponse : apercu
+# de partage vide, alors meme que la balise og:image est presente.
+[[headers]]
+  for = "/opengraph-image"
+  [headers.values]
+    Content-Type = "image/png"
+    Cache-Control = "public, max-age=3600"
