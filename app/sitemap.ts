@@ -1,18 +1,27 @@
 import type { MetadataRoute } from "next";
 
+/** Écrit une fois, réutilisé pour chaque page — jamais recopié à la main. */
+const url = (
+  chemin: string,
+  priorite: number,
+  frequence: MetadataRoute.Sitemap[number]["changeFrequency"]
+): MetadataRoute.Sitemap[number] => ({
+  url: `https://www.atlasflash.com${chemin}`,
+  lastModified: new Date(),
+  changeFrequency: frequence,
+  priority: priorite,
+});
+
 /**
- * Plan du site — un seul fichier `page.tsx`, donc une seule adresse à
- * déclarer. Écrit comme fichier spécial Next.js plutôt que XML statique : le
- * jour où une deuxième page apparaît (tarifs, documentation…), elle s'ajoute
- * ici sans avoir à se souvenir qu'un fichier séparé existe et doit suivre.
+ * Plan du site, écrit comme fichier spécial Next.js plutôt que XML statique :
+ * une page de plus ici suffit, pas besoin de se souvenir qu'un fichier séparé
+ * existe et doit suivre.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
-    {
-      url: "https://www.atlasflash.com/",
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1,
-    },
+    url("/", 1, "weekly"),
+    url("/mentions-legales", 0.2, "yearly"),
+    url("/privacy", 0.2, "yearly"),
+    url("/terms", 0.2, "yearly"),
   ];
 }

@@ -1400,6 +1400,7 @@ function SiteFooter() {
       links: [
         { label: "Conditions", href: "/terms" },
         { label: "Confidentialité", href: "/privacy" },
+        { label: "Mentions légales", href: "/mentions-legales" },
       ],
     },
   ];
