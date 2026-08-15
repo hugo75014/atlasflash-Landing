@@ -784,6 +784,72 @@ function ProofBand() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Section: Conçu pour économiser (quota / gratuit d'abord)            */
+/* ------------------------------------------------------------------ */
+
+function DesignedToSave() {
+  const flow = [
+    "1 clé Atlas",
+    "plusieurs fournisseurs",
+    "plusieurs clés",
+    "des centaines de modèles",
+  ];
+
+  const tools = [
+    "Claude Code",
+    "Hermes Agent",
+    "OpenClaw",
+    "Cursor",
+    "Cline",
+    "Roo Code",
+    "Windsurf",
+  ];
+
+  return (
+    <section className="container-page py-20 sm:py-28">
+      <div className="mx-auto max-w-2xl text-center">
+        <p className="h-eyebrow">Conçu pour économiser</p>
+        <h2 className="mt-4 h-section text-balance">
+          Votre agent IA ne devrait pas s&apos;arrêter parce qu&apos;un quota
+          est atteint.
+        </h2>
+        <p className="mt-4 text-lead text-pretty">
+          Connectez vos fournisseurs IA à Atlas. Atlas orchestre
+          automatiquement vos clés, vos modèles, vos quotas et vos
+          fournisseurs — pour que vous n&apos;ayez jamais à payer tant qu&apos;il
+          reste du gratuit disponible.
+        </p>
+      </div>
+
+      {/* Flow: 1 clé → plusieurs fournisseurs → plusieurs clés → des centaines de modèles */}
+      <div className="mx-auto mt-12 flex max-w-4xl flex-wrap items-center justify-center gap-x-2 gap-y-4">
+        {flow.map((step, i) => (
+          <span key={step} className="flex items-center gap-2">
+            <span className="card inline-flex h-10 items-center px-4 text-[13.5px] font-medium text-ink-800">
+              {step}
+            </span>
+            {i < flow.length - 1 && (
+              <IconArrowRight className="h-4 w-4 flex-none text-ink-300" />
+            )}
+          </span>
+        ))}
+      </div>
+
+      <p className="mx-auto mt-6 max-w-2xl text-center text-[13px] leading-[1.6] text-ink-500">
+        Jusqu&apos;à plus de 1,2 milliard de tokens par mois en combinant les
+        offres gratuites disponibles chez plusieurs fournisseurs, selon leurs
+        conditions, quotas et limites respectifs.
+      </p>
+
+      <p className="mx-auto mt-10 max-w-2xl text-center text-[13.5px] leading-[1.6] text-ink-600">
+        Compatible avec {tools.join(", ")} et tout autre client compatible
+        OpenAI.
+      </p>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Section: Pourquoi Atlas (comparison)                                */
 /* ------------------------------------------------------------------ */
 
@@ -915,14 +981,14 @@ function Features() {
 
 function CompatibleTools() {
   const tools = [
+    "Claude Code",
     "Hermes Agent",
     "OpenClaw",
-    "Claude Code",
-    "Continue.dev",
-    "Roo Code",
     "Cursor",
+    "Cline",
+    "Roo Code",
     "Windsurf",
-    "Tous les clients OpenAI",
+    "Autres clients compatibles OpenAI",
   ];
 
   return (
@@ -1468,6 +1534,7 @@ export default function Page() {
       <TopNav />
       <Hero />
       <ProofBand />
+      <DesignedToSave />
       <section id="why">
         <WhyAtlas />
       </section>
