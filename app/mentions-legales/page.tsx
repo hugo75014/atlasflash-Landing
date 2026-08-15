@@ -31,9 +31,13 @@ export default function MentionsLegales() {
       </Section>
 
       <Section titre="Hébergement">
-        <p>
-          {EDITEUR.hebergeur.nom} — {EDITEUR.hebergeur.adresse}
-        </p>
+        <Puces
+          items={EDITEUR.hebergeurs.map((h) => (
+            <>
+              {h.quoi} : {h.nom} — {h.adresse}
+            </>
+          ))}
+        />
       </Section>
 
       <Section titre="Rôle du service">

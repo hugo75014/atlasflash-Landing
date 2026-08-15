@@ -14,19 +14,36 @@ export const EDITEUR = {
   adresse: "8 rue Maurice Bouchor, 75014 Paris, France",
   siren: "839 385 499 RCS Paris",
   /**
-   * Le SIREN identifie l'entreprise ; le SIRET (SIREN + 5 chiffres) identifie
-   * cet établissement précis et manquait au moment de la rédaction. Un SIRET
-   * inventé serait pire qu'absent — il désignerait un établissement qui n'est
-   * pas le bon.
+   * Relevé le 2026-08-15 au registre public (API Recherche d'entreprises de
+   * l'État, SIREN 839385499) : établissement siège `83938549900018`, actif.
+   * Il portait auparavant la mention « À COMPLÉTER », qui s'affichait telle
+   * quelle sur la page publique — un placeholder livré vaut pire qu'un champ
+   * absent. Ne jamais le remplacer par une valeur non vérifiée au registre.
    */
-  siret: "À COMPLÉTER — numéro SIRET (SIREN + 5 chiffres)",
+  siret: "839 385 499 00018",
   email: "hello@atlasflash.com",
   telephone: "+33 6 59 80 24 91",
   directeurPublication: "Hugues Bellevue",
-  hebergeur: {
-    nom: "Contabo GmbH",
-    adresse: "Aschauer Straße 32a, 81549 Munich, Allemagne",
-  },
+  /**
+   * DEUX hébergeurs, et c'est voulu : la LCEN impose de déclarer qui héberge
+   * **ce site**, pas seulement l'infrastructure du produit. Le site vitrine est
+   * servi par Netlify (en-tête `server: Netlify`, vérifié le 2026-08-15) ;
+   * l'application `app.atlasflash.com` tourne sur le serveur Contabo. Ne
+   * déclarer que Contabo, comme c'était le cas, désignait le mauvais
+   * hébergeur pour la page qui porte la mention.
+   */
+  hebergeurs: [
+    {
+      quoi: "Site atlasflash.com",
+      nom: "Netlify, Inc.",
+      adresse: "512 2nd Street, Suite 200, San Francisco, CA 94107, États-Unis",
+    },
+    {
+      quoi: "Application app.atlasflash.com",
+      nom: "Contabo GmbH",
+      adresse: "Aschauer Straße 32a, 81549 Munich, Allemagne",
+    },
+  ],
 };
 
 /**
