@@ -1469,12 +1469,26 @@ function SiteFooter() {
         { label: "Mentions légales", href: "/mentions-legales" },
       ],
     },
+    {
+      // Il manquait toute façon d'écrire à quelqu'un : les trois autres
+      // colonnes mènent au produit ou à des textes, aucune à un humain. Une
+      // seule adresse, celle qui est réellement relevée (Zoho reçoit, Resend
+      // envoie, livraison prouvée de bout en bout) — pas de formulaire à
+      // écrire ni de second canal à surveiller.
+      title: "Contact",
+      links: [{ label: "hello@atlasflash.com", href: "mailto:hello@atlasflash.com" }],
+    },
   ];
 
   return (
     <footer className="border-t border-ink-200 bg-transparent">
       <div className="container-page py-14">
-        <div className="grid grid-cols-2 gap-10 sm:grid-cols-4">
+        {/*
+          Cinq blocs depuis l'ajout de « Contact » : la marque plus quatre
+          colonnes. À quatre colonnes sur tablette, la cinquième passait seule
+          à la ligne ; on descend donc à trois avant d'ouvrir à cinq en large.
+        */}
+        <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:grid-cols-5">
           <div className="col-span-2 sm:col-span-1">
             <a href="/" className="flex items-center gap-2 text-ink-950">
               <AtlasMark className="h-7 w-7" />
