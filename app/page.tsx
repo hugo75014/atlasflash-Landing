@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import { EDITEUR } from "./legal/shared";
+
 export const metadata: Metadata = {
   title: "Atlas — Une seule API. Des centaines de modèles IA. Gratuit d'abord.",
   description:
@@ -1471,12 +1473,19 @@ function SiteFooter() {
     },
     {
       // Il manquait toute façon d'écrire à quelqu'un : les trois autres
-      // colonnes mènent au produit ou à des textes, aucune à un humain. Une
-      // seule adresse, celle qui est réellement relevée (Zoho reçoit, Resend
-      // envoie, livraison prouvée de bout en bout) — pas de formulaire à
-      // écrire ni de second canal à surveiller.
+      // colonnes mènent au produit ou à des textes, aucune à un humain.
+      //
+      // Adresse et téléphone sont lus dans EDITEUR, la même source que les
+      // mentions légales, et non recopiés : deux exemplaires d'un numéro, c'est
+      // un numéro périmé le jour où il change. Ils y figurent déjà — la LCEN
+      // les impose pour un entrepreneur individuel — donc les afficher ici ne
+      // divulgue rien de neuf, cela les rend seulement plus visibles.
       title: "Contact",
-      links: [{ label: "hello@atlasflash.com", href: "mailto:hello@atlasflash.com" }],
+      links: [
+        { label: EDITEUR.email, href: `mailto:${EDITEUR.email}` },
+        // `tel:` retire les espaces : un composeur de téléphone n'en veut pas.
+        { label: EDITEUR.telephone, href: `tel:${EDITEUR.telephone.replace(/\s/g, "")}` },
+      ],
     },
   ];
 
