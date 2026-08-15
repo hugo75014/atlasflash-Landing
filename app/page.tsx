@@ -836,7 +836,7 @@ function DesignedToSave() {
       </div>
 
       <p className="mx-auto mt-6 max-w-2xl text-center text-[13px] leading-[1.6] text-ink-500">
-        Jusqu&apos;à plus de 1,2 milliard de tokens par mois en combinant les
+        Jusqu&apos;à plus de 1,5 milliard de tokens par mois en combinant les
         offres gratuites disponibles chez plusieurs fournisseurs, selon leurs
         conditions, quotas et limites respectifs.
       </p>
