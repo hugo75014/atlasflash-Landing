@@ -38,3 +38,15 @@ attachments/
 
 # Local Netlify folder
 .netlify
+
+# runtime / cache folders
+.home/
+.deploy-src/
+.scripts/
+add_shw.py
+snap*.js
+preview-build/
+*.png
+!app/**/*.png
+!public/**/*.png
+!docs/**/*.png

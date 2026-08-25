@@ -329,9 +329,18 @@ function SchemaDiagram() {
         >
           POST /v1/chat/completions
         </text>
+        {/* Live dot — "we are listening" indicator */}
+        <circle cx="345" cy="49" r="3" fill="rgb(34, 197, 94)">
+          <animate
+            attributeName="opacity"
+            values="0.4;1;0.4"
+            dur="2.2s"
+            repeatCount="indefinite"
+          />
+        </circle>
       </g>
 
-      {/* arrow down to Atlas */}
+      {/* arrow down to Atlas (with traveling pulse + moving request dot) */}
       <line
         x1="440"
         y1="78"
@@ -340,7 +349,25 @@ function SchemaDiagram() {
         style={{ stroke: "rgb(var(--ink-400))" }}
         strokeWidth="1.5"
         markerEnd="url(#arrow)"
+        className="routing-flow"
       />
+      {/* Small traveling "request" dot — App → Atlas */}
+      <circle r="2.5" fill="#3b82f6">
+        <animate
+          attributeName="cy"
+          from="78"
+          to="116"
+          dur="1.6s"
+          repeatCount="indefinite"
+        />
+        <animate
+          attributeName="opacity"
+          values="0;1;1;0"
+          keyTimes="0;0.15;0.85;1"
+          dur="1.6s"
+          repeatCount="indefinite"
+        />
+      </circle>
 
       {/* ---------- Atlas — Smart Routing Engine ---------- */}
       <g>
@@ -352,18 +379,24 @@ function SchemaDiagram() {
           rx="14"
           fill="url(#atlasGlow)"
           style={{ stroke: "rgb(var(--ink-900))" }}
+          className="atlas-pulse"
         />
-        {/* mini Atlas logo badge (top-left of the box) — même fichier que le
-            reste du site ; le <image> garde le badge dans le SVG du schéma,
-            centré comme avant sur (255 150). */}
-        <image
-          href="/atlas-mark.png"
-          x="242"
-          y="137"
-          width="26"
-          height="26"
-          preserveAspectRatio="xMidYMid meet"
-        />
+        {/* mini Atlas logo badge (top-left of the box) — inline SVG,
+            matches the AtlasMark used in the navbar and final CTA. */}
+        <g transform="translate(255 150)">
+          <path d="M -11 11 L 0 -11 L 0 11 Z" fill="url(#schemaAtlasBlue)" />
+          <path d="M 0 -11 L 11 11 L 0 11 Z" fill="url(#schemaAtlasSilver)" />
+          <path d="M 11 11 L 11 9 L 2 11 Z" fill="url(#schemaAtlasPurple)" />
+          <path
+            d="M -10 3.5 Q -4 -2 6 -0.5 Q 9 0.5 11 2"
+            fill="none"
+            stroke="url(#schemaAtlasSwoosh)"
+            strokeWidth="1.1"
+            strokeLinecap="round"
+            className="swoosh-drift"
+          />
+          <path d="M -3.5 6 L 0 0 L 3.5 6 Z" fill="url(#schemaAtlasInner)" />
+        </g>
         {/* ATLAS wordmark next to the mini logo */}
         <text
           x="278"
@@ -399,34 +432,38 @@ function SchemaDiagram() {
         </text>
       </g>
 
-      {/* ---------- Branching to 4 providers ---------- */}
+      {/* ---------- Branching to 4 providers (with traveling light) ---------- */}
       <path
         d="M 320 220 C 280 250, 220 270, 130 290"
         fill="none"
-        style={{ stroke: "rgb(var(--ink-400))" }}
+        style={{ stroke: "rgb(var(--ink-400))", animationDuration: "3.4s" }}
         strokeWidth="1.5"
         markerEnd="url(#arrow)"
+        className="routing-flow"
       />
       <path
         d="M 380 220 C 360 250, 330 270, 300 290"
         fill="none"
-        style={{ stroke: "rgb(var(--ink-400))" }}
+        style={{ stroke: "rgb(var(--ink-400))", animationDuration: "3.6s" }}
         strokeWidth="1.5"
         markerEnd="url(#arrow)"
+        className="routing-flow"
       />
       <path
         d="M 500 220 C 520 250, 550 270, 580 290"
         fill="none"
-        style={{ stroke: "rgb(var(--ink-400))" }}
+        style={{ stroke: "rgb(var(--ink-400))", animationDuration: "3.2s" }}
         strokeWidth="1.5"
         markerEnd="url(#arrow)"
+        className="routing-flow"
       />
       <path
         d="M 560 220 C 600 250, 660 270, 750 290"
         fill="none"
-        style={{ stroke: "rgb(var(--ink-400))" }}
+        style={{ stroke: "rgb(var(--ink-400))", animationDuration: "3.8s" }}
         strokeWidth="1.5"
         markerEnd="url(#arrow)"
+        className="routing-flow"
       />
 
       {/* ---------- Provider chips ---------- */}
@@ -446,6 +483,7 @@ function SchemaDiagram() {
           strokeWidth="1.5"
           strokeDasharray="4 3"
           markerEnd="url(#arrowWarn)"
+          className="fault-pulse"
         />
         <rect
           x="64"
@@ -494,6 +532,7 @@ function SchemaDiagram() {
             fill: "rgb(var(--surface))",
             stroke: "rgb(var(--ink-900))",
           }}
+          className="ok-glow"
         />
         <circle
           cx="346"
@@ -644,7 +683,11 @@ function ProviderChip({ x, y, label }: { x: number; y: number; label: string }) 
 
 function TopNav() {
   return (
-    <header className="sticky top-0 z-40 border-b border-ink-200/70 bg-bg/80 backdrop-blur supports-[backdrop-filter]:bg-bg/70">
+    <header
+      data-nav-shell
+      data-scrolled="false"
+      className="nav-shell sticky top-0 z-40 border-b border-transparent bg-bg/80 backdrop-blur supports-[backdrop-filter]:bg-bg/70"
+    >
       <div className="container-page flex h-14 items-center justify-between">
         <a href="/" className="flex items-center gap-2 text-ink-950" aria-label="Atlas — Accueil">
           <AtlasMark className="h-7 w-7" />
@@ -696,14 +739,52 @@ function Hero() {
 
       <div className="container-page relative pt-20 pb-16 sm:pt-28 sm:pb-20">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="h-eyebrow animate-fade-in">Atlas · AI Gateway</p>
+          <p className="h-eyebrow" data-reveal style={{ "--reveal-delay": "0ms" } as React.CSSProperties}>
+            Atlas · AI Gateway
+          </p>
 
-          <h1 className="mt-6 h-display text-balance animate-fade-up">
-            Une seule API. Des centaines de modèles IA.{" "}
-            <span className="text-ink-500">Gratuit d&apos;abord.</span>
+          <h1
+            className="mt-6 h-display text-balance"
+            data-reveal
+            style={{ "--reveal-delay": "80ms" } as React.CSSProperties}
+          >
+            <span className="hero-reveal-word" style={{ "--word-delay": "120ms" } as React.CSSProperties}>
+              Une
+            </span>{" "}
+            <span className="hero-reveal-word" style={{ "--word-delay": "170ms" } as React.CSSProperties}>
+              seule
+            </span>{" "}
+            <span className="hero-reveal-word" style={{ "--word-delay": "220ms" } as React.CSSProperties}>
+              API.
+            </span>{" "}
+            <span className="hero-reveal-word" style={{ "--word-delay": "290ms" } as React.CSSProperties}>
+              Des
+            </span>{" "}
+            <span className="hero-reveal-word" style={{ "--word-delay": "340ms" } as React.CSSProperties}>
+              centaines
+            </span>{" "}
+            <span className="hero-reveal-word" style={{ "--word-delay": "390ms" } as React.CSSProperties}>
+              de
+            </span>{" "}
+            <span className="hero-reveal-word" style={{ "--word-delay": "440ms" } as React.CSSProperties}>
+              modèles
+            </span>{" "}
+            <span className="hero-reveal-word" style={{ "--word-delay": "490ms" } as React.CSSProperties}>
+              IA.
+            </span>{" "}
+            <span
+              className="text-ink-500 hero-reveal-word"
+              style={{ "--word-delay": "600ms" } as React.CSSProperties}
+            >
+              Gratuit d&apos;abord.
+            </span>
           </h1>
 
-          <p className="mx-auto mt-6 max-w-2xl text-lead text-pretty">
+          <p
+            className="mx-auto mt-6 max-w-2xl text-lead text-pretty"
+            data-reveal
+            style={{ "--reveal-delay": "320ms" } as React.CSSProperties}
+          >
             Atlas orchestre automatiquement les meilleurs fournisseurs d&apos;IA.
             Il utilise les crédits gratuits disponibles, bascule intelligemment
             lorsqu&apos;un quota est atteint et vous évite toute la complexité
@@ -711,7 +792,11 @@ function Hero() {
           </p>
 
           {/* CTA group */}
-          <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <div
+            className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row"
+            data-reveal
+            style={{ "--reveal-delay": "440ms" } as React.CSSProperties}
+          >
             <a href="https://app.atlasflash.com/signin" className="btn-primary h-11 w-full sm:w-auto px-5 text-[14px]">
               Créer ma clé API gratuitement
               <IconArrowRight />
@@ -722,7 +807,11 @@ function Hero() {
           </div>
 
           {/* Trust mentions */}
-          <ul className="mt-7 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[12.5px] text-ink-500">
+          <ul
+            className="mt-7 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[12.5px] text-ink-500"
+            data-reveal
+            style={{ "--reveal-delay": "560ms" } as React.CSSProperties}
+          >
             <li className="flex items-center gap-1.5">
               <IconCheck className="h-3.5 w-3.5 text-ink-700" />
               Sans carte bancaire
@@ -739,7 +828,11 @@ function Hero() {
         </div>
 
         {/* The Schema */}
-        <div className="mx-auto mt-16 max-w-5xl">
+        <div
+          className="mx-auto mt-16 max-w-5xl"
+          data-reveal
+          style={{ "--reveal-delay": "240ms" } as React.CSSProperties}
+        >
           <div className="card overflow-hidden p-4 sm:p-6">
             <SchemaDiagram />
           </div>
@@ -755,24 +848,36 @@ function Hero() {
 
 function ProofBand() {
   const items = [
-    { value: "160+", label: "fournisseurs" },
-    { value: "Des centaines", label: "de modèles" },
-    { value: "OpenAI", label: "compatible" },
-    { value: "Smart Fallback", label: "automatique" },
-    { value: "Gratuit", label: "avant le payant" },
+    { value: "160+", label: "fournisseurs", count: 160, suffix: "+" },
+    { value: "Des centaines", label: "de modèles", text: true },
+    { value: "OpenAI", label: "compatible", text: true },
+    { value: "Smart Fallback", label: "automatique", text: true },
+    { value: "Gratuit", label: "avant le payant", text: true },
   ];
 
   return (
-    <section className="border-y border-ink-200/70 bg-ink-50/40">
+    <section className="border-y border-ink-200/70 bg-ink-50/40 dark:bg-ink-100/30">
       <div className="container-page py-10">
-        <ul className="grid grid-cols-2 gap-y-8 sm:grid-cols-3 lg:grid-cols-5">
-          {items.map((it) => (
+        <ul className="grid grid-cols-2 gap-y-8 sm:grid-cols-3 lg:grid-cols-5" data-reveal-group>
+          {items.map((it, i) => (
             <li
               key={it.label}
               className="flex flex-col items-center text-center"
+              data-reveal
+              style={{ "--reveal-delay": `${i * 90}ms` } as React.CSSProperties}
             >
               <span className="text-[1.5rem] font-semibold tracking-tight text-ink-950 sm:text-2xl">
-                {it.value}
+                {"text" in it ? (
+                  it.value
+                ) : (
+                  <span
+                    data-count
+                    data-count-to={it.count}
+                    data-count-suffix={it.suffix || ""}
+                  >
+                    0{it.suffix || ""}
+                  </span>
+                )}
               </span>
               <span className="mt-1 text-[12.5px] uppercase tracking-[0.12em] text-ink-500">
                 {it.label}
@@ -867,7 +972,7 @@ function WhyAtlas() {
 
   return (
     <section className="container-page py-20 sm:py-28">
-      <div className="mx-auto max-w-2xl text-center">
+      <div className="mx-auto max-w-2xl text-center" data-reveal>
         <p className="h-eyebrow">Pourquoi Atlas</p>
         <h2 className="mt-4 h-section text-balance">
           L&apos;infrastructure IA, sans la complexité.
@@ -886,11 +991,13 @@ function WhyAtlas() {
               Avec Atlas
             </div>
           </div>
-          <ul>
+          <ul data-reveal-group>
             {rows.map(([without, withAtlas], i) => (
               <li
                 key={without}
                 className="grid grid-cols-2 border-b border-ink-200 last:border-b-0"
+                data-reveal
+                style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
               >
                 <div className="flex items-start gap-3 px-5 py-4 sm:px-6">
                   <span className="mt-0.5 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full border border-ink-200 text-ink-400">
@@ -945,20 +1052,25 @@ function Features() {
   ];
 
   return (
-    <section className="border-y border-ink-200/70 bg-ink-50/30">
+    <section className="border-y border-ink-200/70 bg-ink-50/30 dark:bg-ink-100/20">
       <div className="container-page py-20 sm:py-28">
-        <div className="mx-auto max-w-2xl text-center">
+        <div className="mx-auto max-w-2xl text-center" data-reveal>
           <p className="h-eyebrow">Ce qu&apos;Atlas fait automatiquement</p>
           <h2 className="mt-4 h-section text-balance">
             Quatre mécanismes. Zéro configuration.
           </h2>
         </div>
 
-        <ul className="mt-12 grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-ink-200 bg-ink-200 sm:grid-cols-2">
-          {features.map((f) => (
+        <ul
+          className="mt-12 grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-ink-200 bg-ink-200 sm:grid-cols-2"
+          data-reveal-group
+        >
+          {features.map((f, i) => (
             <li
               key={f.title}
-              className="bg-surface p-6 sm:p-8"
+              className="glass-card shine-on-hover bg-surface p-6 sm:p-8"
+              data-reveal
+              style={{ "--reveal-delay": `${i * 100}ms` } as React.CSSProperties}
             >
               <div className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-ink-200 text-ink-900">
                 {f.icon}
@@ -995,7 +1107,7 @@ function CompatibleTools() {
 
   return (
     <section className="container-page py-20 sm:py-28">
-      <div className="mx-auto max-w-2xl text-center">
+      <div className="mx-auto max-w-2xl text-center" data-reveal>
         <p className="h-eyebrow">Compatible avec vos outils</p>
         <h2 className="mt-4 h-section text-balance">
           Un seul point de remplacement. Tout le reste suit.
@@ -1006,18 +1118,23 @@ function CompatibleTools() {
         </p>
       </div>
 
-      <ul className="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-4">
-        {tools.map((t) => (
+      <ul
+        className="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-4"
+        data-reveal-group
+      >
+        {tools.map((t, i) => (
           <li
             key={t}
-            className="card flex h-16 items-center justify-center px-4 text-center text-[13.5px] font-medium text-ink-800"
+            className="glass-card shine-on-hover card flex h-16 items-center justify-center px-4 text-center text-[13.5px] font-medium text-ink-800"
+            data-reveal
+            style={{ "--reveal-delay": `${i * 60}ms` } as React.CSSProperties}
           >
             {t}
           </li>
         ))}
       </ul>
 
-      <div className="mx-auto mt-12 max-w-3xl">
+      <div className="mx-auto mt-12 max-w-3xl" data-reveal>
         <div className="card overflow-hidden">
           <div className="flex items-center justify-between border-b border-ink-200 bg-ink-50/60 px-4 py-2.5 sm:px-5">
             <div className="flex items-center gap-2">
@@ -1082,19 +1199,24 @@ function HowItWorks() {
   ];
 
   return (
-    <section className="border-y border-ink-200/70 bg-ink-50/30">
+    <section className="border-y border-ink-200/70 bg-ink-50/30 dark:bg-ink-100/20">
       <div className="container-page py-20 sm:py-28">
-        <div className="mx-auto max-w-2xl text-center">
+        <div className="mx-auto max-w-2xl text-center" data-reveal>
           <p className="h-eyebrow">Comment ça fonctionne</p>
           <h2 className="mt-4 h-section text-balance">
             Trois étapes. Aucun changement de code.
           </h2>
         </div>
 
-        <ol className="mx-auto mt-12 grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5">
+        <ol className="mx-auto mt-12 grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5" data-reveal-group>
           {steps.map((s, i) => (
-            <li key={s.n} className="relative">
-              <div className="card h-full p-6">
+            <li
+              key={s.n}
+              className="relative"
+              data-reveal
+              style={{ "--reveal-delay": `${i * 120}ms` } as React.CSSProperties}
+            >
+              <div className="glass-card shine-on-hover card h-full p-6">
                 <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-ink-950 font-mono text-[12.5px] font-medium text-ink-50">
                   {s.n}
                 </span>
@@ -1208,7 +1330,7 @@ function Pricing() {
 
   return (
     <section id="pricing" className="container-page py-20 sm:py-28">
-      <div className="mx-auto max-w-2xl text-center">
+      <div className="mx-auto max-w-2xl text-center" data-reveal>
         <p className="h-eyebrow">Tarifs</p>
         <h2 className="mt-4 h-section text-balance">
           Un seul curseur : combien de fournisseurs tu branches.
@@ -1221,12 +1343,14 @@ function Pricing() {
       </div>
 
       {/* 3 plan cards */}
-      <ul className="mx-auto mt-12 grid max-w-5xl grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5">
-        {plans.map((p) => (
+      <ul className="mx-auto mt-12 grid max-w-5xl grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5" data-reveal-group>
+        {plans.map((p, i) => (
           <li
             key={p.key}
+            data-reveal
+            style={{ "--reveal-delay": `${i * 100}ms` } as React.CSSProperties}
             className={
-              "relative flex h-full flex-col rounded-xl border bg-surface p-6 sm:p-7 " +
+              "glass-card shine-on-hover relative flex h-full flex-col rounded-xl border bg-surface p-6 sm:p-7 " +
               (p.highlight
                 ? "border-ink-950 shadow-[0_0_0_1px_rgb(var(--ink-950))] dark:border-ink-50 dark:shadow-[0_0_0_1px_rgb(var(--ink-50))]"
                 : "border-ink-200")
@@ -1365,12 +1489,12 @@ function Faq() {
 
   return (
     <section className="container-page py-20 sm:py-28">
-      <div className="mx-auto max-w-2xl text-center">
+      <div className="mx-auto max-w-2xl text-center" data-reveal>
         <p className="h-eyebrow">Questions fréquentes</p>
         <h2 className="mt-4 h-section text-balance">Tout ce qu&apos;il faut savoir.</h2>
       </div>
 
-      <div className="mx-auto mt-12 max-w-3xl">
+      <div className="mx-auto mt-12 max-w-3xl" data-reveal>
         <div className="card divide-y divide-ink-200 overflow-hidden">
           {items.map((it) => (
             <details
@@ -1413,7 +1537,7 @@ function FinalCta() {
           aria-hidden="true"
           className="pointer-events-none absolute -top-24 left-1/2 h-72 w-[42rem] -translate-x-1/2 rounded-full bg-ink-50/10 blur-3xl"
         />
-        <div className="relative px-6 py-16 text-center sm:px-10 sm:py-20">
+        <div className="relative px-6 py-16 text-center sm:px-10 sm:py-20" data-reveal>
           <div className="mx-auto mb-7 flex justify-center">
             <AtlasMark className="h-12 w-12" />
           </div>
@@ -1497,7 +1621,7 @@ function SiteFooter() {
 
   return (
     <footer className="border-t border-ink-200 bg-transparent">
-      <div className="container-page py-14">
+      <div className="container-page py-14" data-reveal>
         {/*
           Cinq blocs depuis l'ajout de « Contact » : la marque plus quatre
           colonnes. À quatre colonnes sur tablette, la cinquième passait seule
