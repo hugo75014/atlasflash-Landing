@@ -14,55 +14,69 @@
 @layer base {
   :root {
     color-scheme: light;
-    /* warm cream gradient — light mode */
-    --bg-start: 255 245 238;   /* #fff5ee — pale peach */
-    --bg-mid: 255 250 242;     /* #fffaf2 — soft cream */
-    --bg-end: 254 245 227;     /* #fef5e3 — warm cream */
-    --bg: 255 248 240;         /* fallback solid */
-    --surface: 255 255 255;    /* pure white cards */
-    --surface-2: 254 251 247;  /* subtle warm tint */
-    --ink-50: 250 250 250;
-    --ink-100: 244 244 245;
-    --ink-200: 228 228 231;
-    --ink-300: 212 212 216;
-    --ink-400: 161 161 170;
-    --ink-500: 113 113 122;
-    --ink-600: 82 82 91;
-    --ink-700: 63 63 70;
-    --ink-800: 39 39 42;
-    --ink-900: 24 24 27;
-    --ink-950: 9 9 11;
-    --accent: 9 9 11;
+    /* ---- Surface ---- */
+    --bg-start: 250 250 250;   /* #FAFAFA — soft warm white */
+    --bg-mid:   252 252 252;
+    --bg-end:   248 248 248;
+    --bg:        250 250 250;
+    --surface:   255 255 255;   /* pure white cards */
+    --surface-2: 247 247 247;   /* subtle section bg */
+
+    /* ---- Ink (text + borders) ---- */
+    --ink-50:   250 250 250;
+    --ink-100:  244 244 245;
+    --ink-200:  229 229 229;    /* subtle border */
+    --ink-300:  212 212 216;
+    --ink-400:  161 161 170;
+    --ink-500:  115 115 125;    /* secondary text */
+    --ink-600:  82 82 91;       /* primary muted text */
+    --ink-700:  63 63 70;
+    --ink-800:  38 38 45;
+    --ink-900:  18 18 23;       /* deep title text */
+    --ink-950:  9 9 14;         /* near-black */
+
+    /* ---- Brand accent — warm graphite (inverts in dark mode) ---- */
+    --accent: 18 18 23;
     --accent-text: 255 255 255;
-    --ring: 9 9 11;
-    /* motion tokens */
+    --ring: 18 18 23;
+
+    /* ---- Highlight accent (used very sparingly) ---- */
+    --highlight: 59 130 246;   /* blue-500 for subtle highlights */
+
+    /* ---- Motion tokens ---- */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
     --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
     --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .dark {
     color-scheme: dark;
-    /* dark gray (not black) — dark mode */
-    --bg-start: 26 26 26;      /* #1a1a1a */
-    --bg-mid: 30 30 30;        /* #1e1e1e */
-    --bg-end: 24 24 24;        /* #181818 */
-    --bg: 26 26 26;            /* solid fallback */
-    --surface: 35 35 35;       /* #232323 — cards, slightly lifted */
-    --surface-2: 32 32 32;     /* #202020 — subtle section */
-    --ink-50: 26 26 26;
-    --ink-100: 35 35 35;
-    --ink-200: 47 47 47;
-    --ink-300: 64 64 64;
-    --ink-400: 113 113 122;
-    --ink-500: 161 161 170;
-    --ink-600: 212 212 216;
-    --ink-700: 228 228 232;
-    --ink-800: 244 244 245;
-    --ink-900: 250 250 250;
-    --ink-950: 255 255 255;
-    --accent: 250 250 250;
-    --accent-text: 9 9 11;
-    --ring: 250 250 250;
+    /* Dark mode: slightly darker gray, not pure black (per user request) */
+    --bg-start: 24 24 27;       /* #18181B */
+    --bg-mid:   28 28 31;
+    --bg-end:   22 22 25;
+    --bg:        24 24 27;
+    --surface:   32 32 36;       /* cards, slightly lifted */
+    --surface-2: 28 28 31;
+
+    --ink-50:   24 24 27;
+    --ink-100:  32 32 36;
+    --ink-200:  44 44 50;       /* borders */
+    --ink-300:  63 63 70;
+    --ink-400:  113 113 125;
+    --ink-500:  161 161 170;
+    --ink-600:  200 200 210;
+    --ink-700:  228 228 232;
+    --ink-800:  242 242 245;
+    --ink-900:  248 248 250;    /* primary text on dark */
+    --ink-950:  255 255 255;
+
+    --accent: 248 248 250;
+    --accent-text: 9 9 14;
+    --ring: 248 248 250;
+
+    --highlight: 96 165 250;   /* blue-400 */
   }
 
   html {
@@ -82,8 +96,13 @@
         rgb(var(--bg-end)) 100%);
     background-attachment: fixed;
     min-height: 100vh;
-    font-feature-settings: "ss01", "cv11";
-    transition: background-color 200ms ease, color 200ms ease, background-image 200ms ease;
+    /* Distinctive type stack — system fonts with optical sizing + tight display tracking */
+    font-family: "Inter", "InterVariable", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-feature-settings: "ss01", "cv02", "cv11", "calt";
+    font-optical-sizing: auto;
+    font-variation-settings: "opsz" 16, "wght" 400;
+    letter-spacing: -0.011em;
+    transition: background-color 250ms ease, color 250ms ease, background-image 250ms ease;
   }
 
   ::selection {
@@ -102,16 +121,40 @@
     @apply mx-auto w-full max-w-[1200px] px-5 sm:px-6 lg:px-8;
   }
 
+  /* ---- Display headings: tight tracking, medium weight, variable optical size ---- */
   .h-display {
-    @apply text-[2.75rem] leading-[1.05] tracking-tightest font-medium sm:text-6xl lg:text-[4.25rem];
+    font-size: 2.75rem;
+    line-height: 1.02;
+    letter-spacing: -0.045em;
+    font-weight: 500;
+    font-variation-settings: "opsz" 96, "wght" 500;
+    text-wrap: balance;
+  }
+  @media (min-width: 640px) {
+    .h-display { font-size: 4rem; line-height: 1.0; }
+  }
+  @media (min-width: 1024px) {
+    .h-display { font-size: 5rem; line-height: 0.98; letter-spacing: -0.05em; }
   }
 
   .h-section {
-    @apply text-3xl leading-[1.1] tracking-tight font-medium sm:text-4xl lg:text-[2.75rem];
+    font-size: 1.875rem;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    font-weight: 500;
+    font-variation-settings: "opsz" 48, "wght" 500;
+    text-wrap: balance;
+  }
+  @media (min-width: 640px) {
+    .h-section { font-size: 2.25rem; }
+  }
+  @media (min-width: 1024px) {
+    .h-section { font-size: 2.75rem; letter-spacing: -0.035em; }
   }
 
   .h-eyebrow {
-    @apply text-xs font-medium uppercase tracking-[0.18em] text-ink-500;
+    @apply text-[11px] font-medium uppercase tracking-[0.2em] text-ink-500;
+    font-variation-settings: "opsz" 12, "wght" 500;
   }
 
   .text-body {
@@ -119,190 +162,220 @@
   }
 
   .text-lead {
-    @apply text-base leading-[1.6] text-ink-600 sm:text-lg;
+    @apply text-[17px] leading-[1.6] text-ink-500 sm:text-lg;
+    font-variation-settings: "opsz" 18, "wght" 400;
+    letter-spacing: -0.015em;
   }
 
+  /* ---- Buttons: soft, premium feel with very subtle shadow & lift ---- */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-medium transition-all duration-200 ease-out;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium;
+    transition:
+      transform 280ms var(--ease-out-expo),
+      background-color 200ms var(--ease-out-soft),
+      color 200ms var(--ease-out-soft),
+      box-shadow 280ms var(--ease-out-expo);
     will-change: transform;
+    font-variation-settings: "opsz" 14, "wght" 500;
+    letter-spacing: -0.005em;
   }
 
   .btn-primary {
-    @apply btn bg-ink-950 text-white hover:bg-ink-800 dark:bg-ink-50 dark:text-ink-950 dark:hover:bg-ink-100;
-    box-shadow: 0 1px 0 0 rgb(var(--ink-950) / 0.04);
+    @apply btn bg-ink-950 text-white dark:bg-ink-50 dark:text-ink-950;
+    box-shadow:
+      0 1px 0 0 rgb(var(--ink-950) / 0.04),
+      0 1px 2px 0 rgb(var(--ink-950) / 0.05);
   }
   .btn-primary:hover {
+    background: rgb(var(--ink-900));
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px -8px rgb(var(--ink-950) / 0.35);
+    box-shadow:
+      0 8px 24px -8px rgb(var(--ink-950) / 0.4),
+      0 2px 4px -1px rgb(var(--ink-950) / 0.06);
+  }
+  .dark .btn-primary:hover {
+    background: rgb(var(--ink-100));
+    box-shadow:
+      0 8px 24px -8px rgb(255 255 255 / 0.15),
+      0 2px 4px -1px rgb(255 255 255 / 0.04);
   }
   .btn-primary:active {
     transform: translateY(0);
-    box-shadow: 0 1px 0 0 rgb(var(--ink-950) / 0.04);
   }
 
   .btn-secondary {
-    @apply btn border border-ink-200 bg-surface text-ink-900 hover:bg-ink-50 dark:border-ink-200 dark:bg-surface dark:text-ink-900 dark:hover:bg-ink-100;
+    @apply btn border border-ink-200 bg-surface text-ink-900;
+  }
+  .dark .btn-secondary {
+    @apply border-ink-200 bg-surface text-ink-900;
   }
   .btn-secondary:hover {
     transform: translateY(-1px);
     border-color: rgb(var(--ink-300));
+    background: rgb(var(--ink-50));
+  }
+  .dark .btn-secondary:hover {
+    border-color: rgb(var(--ink-300));
+    background: rgb(var(--ink-100));
   }
   .btn-secondary:active {
     transform: translateY(0);
   }
 
+  /* ---- Cards: softer radius, gentler shadow, very subtle hover lift ---- */
   .card {
-    @apply rounded-xl border border-ink-200 bg-surface;
-    transition: border-color 250ms var(--ease-out-soft), box-shadow 250ms var(--ease-out-soft), transform 250ms var(--ease-out-soft);
+    @apply rounded-2xl border border-ink-200 bg-surface;
+    box-shadow:
+      0 1px 0 0 rgb(var(--ink-900) / 0.02),
+      0 1px 3px 0 rgb(var(--ink-900) / 0.03);
+  }
+  .dark .card {
+    box-shadow:
+      0 1px 0 0 rgb(0 0 0 / 0.2),
+      0 1px 3px 0 rgb(0 0 0 / 0.25);
   }
 
   .card-soft {
-    @apply rounded-xl border border-ink-200 bg-ink-50/40 dark:bg-ink-100/60;
-    transition: border-color 250ms var(--ease-out-soft), box-shadow 250ms var(--ease-out-soft), transform 250ms var(--ease-out-soft);
+    @apply rounded-2xl border border-ink-200 bg-surface-2;
   }
 
-  /* Glass card — premium surface with subtle inner highlight */
+  /* ---- Glass card ---- */
   .glass-card {
-    @apply rounded-xl border border-ink-200 bg-surface;
+    @apply rounded-2xl border border-ink-200 bg-surface;
     position: relative;
     overflow: hidden;
-    transition: border-color 300ms var(--ease-out-soft), box-shadow 300ms var(--ease-out-soft), transform 300ms var(--ease-out-soft);
+    transition:
+      border-color 350ms var(--ease-out-expo),
+      box-shadow 350ms var(--ease-out-expo),
+      transform 350ms var(--ease-out-expo),
+      background-color 350ms var(--ease-out-expo);
+    box-shadow:
+      0 1px 0 0 rgb(var(--ink-900) / 0.02),
+      0 1px 3px 0 rgb(var(--ink-900) / 0.03);
   }
   .glass-card::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgb(var(--ink-50) / 0.6) 0%, transparent 50%);
+    background: linear-gradient(135deg, rgb(var(--ink-50) / 0.7) 0%, transparent 55%);
     opacity: 0;
-    transition: opacity 350ms var(--ease-out-soft);
+    transition: opacity 450ms var(--ease-out-expo);
     pointer-events: none;
   }
   .glass-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
+    border-color: rgb(var(--ink-300));
+    background: rgb(var(--surface));
+    box-shadow:
+      0 14px 32px -18px rgb(var(--ink-900) / 0.14),
+      0 2px 6px -2px rgb(var(--ink-900) / 0.04);
+  }
+  .dark .glass-card:hover {
     border-color: rgb(var(--ink-300));
     box-shadow:
-      0 12px 32px -16px rgb(var(--ink-900) / 0.18),
-      0 2px 6px -2px rgb(var(--ink-900) / 0.06);
+      0 14px 32px -18px rgb(0 0 0 / 0.45),
+      0 2px 6px -2px rgb(0 0 0 / 0.25);
   }
   .glass-card:hover::before {
     opacity: 1;
   }
 
+  /* ---- Grid background: barely visible, gives depth without noise ---- */
   .grid-bg {
     background-image:
-      linear-gradient(to right, rgb(var(--ink-900) / 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(var(--ink-900) / 0.05) 1px, transparent 1px);
-    background-size: 56px 56px;
+      linear-gradient(to right, rgb(var(--ink-900) / 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(var(--ink-900) / 0.04) 1px, transparent 1px);
+    background-size: 64px 64px;
     background-position: -1px -1px;
-  }
-
-  /* Subtle radial glow that breathes very slowly */
-  .ambient-glow {
-    background: radial-gradient(circle at center, rgb(var(--ink-900) / 0.06) 0%, transparent 60%);
-    animation: ambient-breathe 9s ease-in-out infinite;
-  }
-
-  @keyframes ambient-breathe {
-    0%, 100% { opacity: 0.55; transform: scale(1); }
-    50%      { opacity: 0.9;  transform: scale(1.04); }
   }
 
   .ring-soft {
     box-shadow: inset 0 0 0 1px rgb(var(--ink-900) / 0.04);
   }
 
-  /* ---------- Reveal animations (CSS-driven, progressive) ---------- */
-  /* Sections / blocks opt in with `data-reveal` and get these styles.   */
-  /* An inline script in layout.tsx adds `.is-in` when the element      */
-  /* enters the viewport, falling back gracefully if JS is disabled.   */
+  /* Reusable accent line */
+  .accent-line {
+    background: linear-gradient(90deg, transparent, rgb(var(--ink-300)) 30%, rgb(var(--ink-300)) 70%, transparent);
+    height: 1px;
+  }
 
+  /* ---- Entrance animations ---- */
   [data-reveal] {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(14px);
     transition:
-      opacity 700ms var(--ease-out-soft),
-      transform 700ms var(--ease-out-soft);
+      opacity 900ms var(--ease-out-expo),
+      transform 900ms var(--ease-out-expo);
     transition-delay: var(--reveal-delay, 0ms);
     will-change: opacity, transform;
+  }
+  [data-reveal="scale"] {
+    transform: scale(0.96);
+  }
+  [data-reveal="scale"].is-in {
+    transform: scale(1);
+  }
+  [data-reveal="fade"] {
+    transform: none;
   }
   [data-reveal].is-in {
     opacity: 1;
     transform: translateY(0);
   }
 
-  /* For browsers that support CSS scroll-driven animations, use them
-     as a no-JS fallback. The `.is-in` class still wins for everyone else. */
-  @supports (animation-timeline: view()) {
-    [data-reveal] {
-      animation: reveal-in linear both;
-      animation-timeline: view();
-      animation-range: entry 0% cover 20%;
-    }
-    [data-reveal].is-in {
-      animation: none;
-      opacity: 1;
-      transform: none;
-    }
-  }
-
-  @keyframes reveal-in {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  /* Word-by-word highlight for the hero (no typewriter) */
+  /* Hero word-by-word reveal */
   .hero-reveal-word {
     display: inline-block;
     opacity: 0;
-    transform: translateY(8px);
-    animation: hero-word-in 700ms var(--ease-out-soft) forwards;
+    transform: translateY(10px) scale(0.985);
+    animation: hero-word-in 800ms var(--ease-out-expo) forwards;
     animation-delay: var(--word-delay, 0ms);
   }
   @keyframes hero-word-in {
-    to { opacity: 1; transform: translateY(0); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
   }
 
-  /* Gentle pulse for the Atlas box in the schema */
+  /* Atlas box pulse */
   @keyframes atlas-pulse {
     0%, 100% { filter: drop-shadow(0 0 0 rgb(var(--ink-900) / 0)); }
-    50%      { filter: drop-shadow(0 0 12px rgb(var(--ink-900) / 0.18)); }
+    50%      { filter: drop-shadow(0 0 14px rgb(var(--ink-900) / 0.16)); }
   }
-  .atlas-pulse { animation: atlas-pulse 4s ease-in-out infinite; }
+  .atlas-pulse { animation: atlas-pulse 5s ease-in-out infinite; }
 
-  /* Subtle traveling light for SVG paths in the schema */
+  /* Slower, more elegant routing flow */
   .routing-flow {
-    stroke-dasharray: 6 14;
-    animation: routing-dash 3.4s linear infinite;
+    stroke-dasharray: 8 18;
+    animation: routing-dash 4.2s linear infinite;
   }
   @keyframes routing-dash {
-    to { stroke-dashoffset: -40; }
+    to { stroke-dashoffset: -52; }
   }
 
-  /* Slow ambient drift on the swoosh */
+  /* Swoosh drift */
   .swoosh-drift {
     transform-origin: 50% 50%;
-    animation: swoosh-drift 7s ease-in-out infinite;
+    animation: swoosh-drift 9s ease-in-out infinite;
   }
   @keyframes swoosh-drift {
-    0%, 100% { transform: translateX(0); opacity: 0.85; }
+    0%, 100% { transform: translateX(0); opacity: 0.9; }
     50%      { transform: translateX(2px); opacity: 1; }
   }
 
-  /* Smart Fallback "fault" pulse — subtle red blink on the failing provider */
+  /* Fault pulse */
   @keyframes fault-pulse {
     0%, 80%, 100% { opacity: 0.35; }
     40%           { opacity: 1; }
   }
-  .fault-pulse { animation: fault-pulse 2.6s ease-in-out infinite; }
+  .fault-pulse { animation: fault-pulse 3.2s ease-in-out infinite; }
 
-  /* "Available again" soft glow */
+  /* OK glow on Smart Fallback */
   @keyframes ok-glow {
     0%, 100% { filter: drop-shadow(0 0 0 transparent); }
-    50%      { filter: drop-shadow(0 0 4px rgba(34, 197, 94, 0.45)); }
+    50%      { filter: drop-shadow(0 0 6px rgba(34, 197, 94, 0.4)); }
   }
-  .ok-glow { animation: ok-glow 3s ease-in-out infinite; }
+  .ok-glow { animation: ok-glow 3.6s ease-in-out infinite; }
 
-  /* Smooth shine sweep on glass cards (very subtle) */
+  /* Shine sweep on hover */
   .shine-on-hover {
     position: relative;
     overflow: hidden;
@@ -311,38 +384,68 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(115deg, transparent 35%, rgb(var(--ink-50) / 0.5) 50%, transparent 65%);
+    background: linear-gradient(115deg, transparent 40%, rgb(var(--ink-50) / 0.55) 50%, transparent 60%);
     transform: translateX(-120%);
-    transition: transform 700ms var(--ease-out-soft);
+    transition: transform 900ms var(--ease-out-expo);
     pointer-events: none;
   }
   .shine-on-hover:hover::after { transform: translateX(120%); }
 
-  /* Navbar — slightly more compact + glassier on scroll */
+  /* Navbar */
   .nav-shell {
     transition:
-      background-color 250ms var(--ease-out-soft),
-      border-color 250ms var(--ease-out-soft),
-      backdrop-filter 250ms var(--ease-out-soft),
-      box-shadow 250ms var(--ease-out-soft);
+      background-color 280ms var(--ease-out-soft),
+      border-color 280ms var(--ease-out-soft),
+      backdrop-filter 280ms var(--ease-out-soft),
+      box-shadow 280ms var(--ease-out-soft);
   }
   .nav-shell[data-scrolled="true"] {
     background-color: color-mix(in srgb, rgb(var(--bg-mid)) 78%, transparent);
     border-bottom-color: rgb(var(--ink-200) / 0.7);
-    backdrop-filter: saturate(140%) blur(10px);
-    -webkit-backdrop-filter: saturate(140%) blur(10px);
+    backdrop-filter: saturate(160%) blur(12px);
+    -webkit-backdrop-filter: saturate(160%) blur(12px);
     box-shadow: 0 1px 0 0 rgb(var(--ink-900) / 0.02);
   }
 
-  /* Tiny live-dot — for "in service" markers */
+  /* Live dot */
   @keyframes live-dot {
     0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.45); }
-    50%      { box-shadow: 0 0 0 5px rgba(34, 197, 94, 0); }
+    50%      { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
   }
   .live-dot {
     width: 6px; height: 6px; border-radius: 9999px;
     background: rgb(34, 197, 94);
-    animation: live-dot 2.2s ease-out infinite;
+    animation: live-dot 2.6s ease-out infinite;
+  }
+
+  /* ---- Language selector ---- */
+  .lang-shell { position: relative; }
+  .lang-menu {
+    @apply rounded-xl border border-ink-200 bg-surface p-1;
+    box-shadow:
+      0 12px 32px -10px rgb(var(--ink-900) / 0.18),
+      0 2px 6px -2px rgb(var(--ink-900) / 0.06);
+  }
+  .dark .lang-menu {
+    box-shadow:
+      0 12px 32px -10px rgb(0 0 0 / 0.5),
+      0 2px 6px -2px rgb(0 0 0 / 0.3);
+  }
+  .lang-option {
+    @apply flex w-full items-center justify-between gap-3 rounded-md px-3 py-2 text-left text-[13px] text-ink-700 transition-colors;
+  }
+  .lang-option:hover {
+    background: rgb(var(--ink-50));
+  }
+  .dark .lang-option:hover {
+    background: rgb(var(--ink-100));
+  }
+  .lang-option[aria-current="true"] {
+    @apply text-ink-900;
+    background: rgb(var(--ink-100));
+  }
+  .dark .lang-option[aria-current="true"] {
+    background: rgb(var(--ink-200) / 0.5);
   }
 }
 
@@ -350,16 +453,17 @@
   .text-balance { text-wrap: balance; }
   .text-pretty  { text-wrap: pretty; }
 
-  /* Stagger helpers — apply to children of any element with `data-reveal-group` */
+  /* Stagger helpers */
   [data-reveal-group] > [data-reveal] { --reveal-delay: 0ms; }
-  [data-reveal-group] > [data-reveal]:nth-child(2) { --reveal-delay: 90ms; }
-  [data-reveal-group] > [data-reveal]:nth-child(3) { --reveal-delay: 180ms; }
-  [data-reveal-group] > [data-reveal]:nth-child(4) { --reveal-delay: 270ms; }
-  [data-reveal-group] > [data-reveal]:nth-child(5) { --reveal-delay: 360ms; }
-  [data-reveal-group] > [data-reveal]:nth-child(6) { --reveal-delay: 450ms; }
+  [data-reveal-group] > [data-reveal]:nth-child(2) { --reveal-delay: 100ms; }
+  [data-reveal-group] > [data-reveal]:nth-child(3) { --reveal-delay: 200ms; }
+  [data-reveal-group] > [data-reveal]:nth-child(4) { --reveal-delay: 300ms; }
+  [data-reveal-group] > [data-reveal]:nth-child(5) { --reveal-delay: 400ms; }
+  [data-reveal-group] > [data-reveal]:nth-child(6) { --reveal-delay: 500ms; }
+  [data-reveal-group] > [data-reveal]:nth-child(7) { --reveal-delay: 600ms; }
+  [data-reveal-group] > [data-reveal]:nth-child(8) { --reveal-delay: 700ms; }
 }
 
-/* Honor user preference — turn off everything that moves. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -370,7 +474,7 @@
     scroll-behavior: auto !important;
   }
   [data-reveal] { opacity: 1 !important; transform: none !important; }
-  .ambient-glow, .routing-flow, .swoosh-drift, .fault-pulse, .ok-glow, .atlas-pulse, .live-dot {
+  .routing-flow, .swoosh-drift, .fault-pulse, .ok-glow, .atlas-pulse, .live-dot {
     animation: none !important;
   }
   .shine-on-hover::after { display: none !important; }

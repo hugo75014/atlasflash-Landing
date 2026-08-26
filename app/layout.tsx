@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { translations, LANGS, DEFAULT_LANG } from "./i18n";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -54,8 +55,8 @@ export const metadata: Metadata = {
 
 export const viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#09090b" },
+    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
+    { media: "(prefers-color-scheme: dark)", color: "#18181b" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -67,17 +68,24 @@ const themeToggleScript = `(function(){document.addEventListener('click',functio
 
 const watermarkRemovalScript = `(function(){function nuke(){var el=document.getElementById('minimax-floating-ball');if(el&&el.parentNode){el.parentNode.removeChild(el);}}if(document.readyState!=='loading'){nuke();}else{document.addEventListener('DOMContentLoaded',nuke);}setTimeout(nuke,100);setTimeout(nuke,500);setTimeout(nuke,1500);var obs=new MutationObserver(function(){nuke();});if(document.body){obs.observe(document.body,{childList:true,subtree:true});}});`;
 
-/* Scroll reveal — adds `.is-in` to `[data-reveal]` elements as they enter
-   the viewport. Defers to next tick so the DOM is parsed first. */
-const revealScript = `(function(){function run(){if(!('IntersectionObserver' in window)){document.querySelectorAll('[data-reveal]').forEach(function(el){el.classList.add('is-in');});return;}var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('is-in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:0.08});document.querySelectorAll('[data-reveal]').forEach(function(el){io.observe(el);});}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}else{run();}})();`;
+/* Scroll reveal — IntersectionObserver with deferred run + safety net.
+   The safety net ensures that every data-reveal element eventually becomes
+   visible, even if the observer never fires (e.g. when the browser doesn't
+   scroll the page during a full-page screenshot capture, or if the user
+   navigates to a section via skip-link). */
+const revealScript = `(function(){function run(){var els=document.querySelectorAll('[data-reveal]');if(!('IntersectionObserver' in window)){els.forEach(function(el){el.classList.add('is-in');});return;}var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('is-in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -4% 0px',threshold:0.05});els.forEach(function(el){io.observe(el);});setTimeout(function(){document.querySelectorAll('[data-reveal]:not(.is-in)').forEach(function(el){el.classList.add('is-in');});},1500);}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}else{run();}})();`;
 
-/* Navbar — adds `data-scrolled="true"` once the page has scrolled past a small
-   threshold so the bar can compress + gain a glassier background. */
+/* Navbar scroll state */
 const navScrollScript = `(function(){function run(){var nav=document.querySelector('[data-nav-shell]');if(!nav)return;var raf=0;function update(){var y=window.scrollY||window.pageYOffset||0;nav.dataset.scrolled=y>12?'true':'false';}window.addEventListener('scroll',function(){if(raf)return;raf=requestAnimationFrame(function(){update();raf=0;});},{passive:true});update();}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}else{run();}})();`;
 
-/* Number counters — animates `[data-count]` from 0 to the integer in
-   `data-count-to`. Defers until DOM ready. */
-const counterScript = `(function(){function run(){if(!('IntersectionObserver' in window))return;var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(!e.isIntersecting)return;var el=e.target;io.unobserve(el);var to=parseFloat(el.getAttribute('data-count-to'));if(isNaN(to))return;var dur=900;var start=performance.now();var fmt=el.getAttribute('data-count-suffix')||'';function step(t){var p=Math.min(1,(t-start)/dur);var eased=1-Math.pow(1-p,3);var val=Math.round(eased*to);el.textContent=val+fmt;}step(start);function loop(t){if(t-start>=dur){el.textContent=to+fmt;return;}step(t);requestAnimationFrame(loop);}requestAnimationFrame(loop);});},{threshold:0.4});document.querySelectorAll('[data-count]').forEach(function(el){io.observe(el);});}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}else{run();}})();`;
+/* Number counters */
+const counterScript = `(function(){function run(){if(!('IntersectionObserver' in window))return;var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(!e.isIntersecting)return;var el=e.target;io.unobserve(el);var to=parseFloat(el.getAttribute('data-count-to'));if(isNaN(to))return;var dur=1000;var start=performance.now();var fmt=el.getAttribute('data-count-suffix')||'';function step(t){var p=Math.min(1,(t-start)/dur);var eased=1-Math.pow(1-p,3);var val=Math.round(eased*to);el.textContent=val+fmt;}step(start);function loop(t){if(t-start>=dur){el.textContent=to+fmt;return;}step(t);requestAnimationFrame(loop);}requestAnimationFrame(loop);});},{threshold:0.4});document.querySelectorAll('[data-count]').forEach(function(el){io.observe(el);});}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}else{run();}})();`;
+
+/* i18n runtime — swaps [data-i18n] textContent based on selected language. */
+const i18nDictJson = JSON.stringify(translations);
+const i18nLangsJson = JSON.stringify(LANGS);
+const i18nDefault = JSON.stringify(DEFAULT_LANG);
+const i18nScript = `(function(){var DICT=${i18nDictJson};var LANGS=${i18nLangsJson};var DEFAULT=${i18nDefault};var KEY='atlas-lang';var THEME_KEY='atlas-theme';function detect(){try{var hashParams=new URLSearchParams(location.search);var qp=hashParams.get('_lang');if(qp&&DICT[qp]){try{localStorage.setItem(KEY,qp);}catch(e){}return qp;}var saved=localStorage.getItem(KEY);if(saved&&DICT[saved])return saved;}catch(e){}var nav=(navigator.language||'en').toLowerCase();var match=LANGS.find(function(l){return nav.indexOf(l.code)===0;});return match?match.code:DEFAULT;}function detectTheme(){try{var hashParams=new URLSearchParams(location.search);var qp=hashParams.get('_theme');if(qp==='dark'||qp==='light'){try{localStorage.setItem(THEME_KEY,qp);}catch(e){}document.documentElement.classList.toggle('dark',qp==='dark');document.documentElement.dataset.theme=qp;return qp;}}catch(e){}var saved=localStorage.getItem(THEME_KEY);if(saved==='dark'||saved==='light')return saved;return window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}function apply(lang){document.documentElement.lang=lang;document.querySelectorAll('[data-i18n]').forEach(function(el){var k=el.getAttribute('data-i18n');if(DICT[lang]&&DICT[lang][k]!=null)el.textContent=DICT[lang][k];});document.querySelectorAll('[data-i18n-attr]').forEach(function(el){var k=el.getAttribute('data-i18n-attr');if(!k)return;var v=DICT[lang]&&DICT[lang][k]!=null?DICT[lang][k]:DICT[DEFAULT][k];if(v==null)return;el.setAttribute('aria-label',v);});document.querySelectorAll('[data-lang-option]').forEach(function(el){el.setAttribute('aria-current',el.getAttribute('data-lang-option')===lang?'true':'false');});var cur=document.querySelector('[data-lang-current]');if(cur)cur.textContent=lang.toUpperCase();}function setLang(lang){try{localStorage.setItem(KEY,lang);}catch(e){}apply(lang);}function attachHandlers(){document.addEventListener('click',function(e){var opt=e.target.closest('[data-lang-option]');if(opt){e.preventDefault();setLang(opt.getAttribute('data-lang-option'));var menu=document.querySelector('[data-lang-menu]');if(menu)menu.setAttribute('data-open','false');var btn=document.querySelector('[data-lang-toggle]');if(btn)btn.setAttribute('aria-expanded','false');return;}var tog=e.target.closest('[data-lang-toggle]');if(tog){e.preventDefault();var m=document.querySelector('[data-lang-menu]');if(!m)return;var open=m.getAttribute('data-open')==='true';m.setAttribute('data-open',open?'false':'true');tog.setAttribute('aria-expanded',open?'false':'true');return;}if(!e.target.closest('[data-lang-menu]')&&!e.target.closest('[data-lang-toggle]')){var m2=document.querySelector('[data-lang-menu]');if(m2)m2.setAttribute('data-open','false');var btn2=document.querySelector('[data-lang-toggle]');if(btn2)btn2.setAttribute('aria-expanded','false');}});document.addEventListener('keydown',function(e){if(e.key==='Escape'){var m=document.querySelector('[data-lang-menu]');if(m)m.setAttribute('data-open','false');}});}function init(){var theme=detectTheme();if(theme==='dark')document.documentElement.classList.add('dark');document.documentElement.dataset.theme=theme;var lang=detect();requestAnimationFrame(function(){requestAnimationFrame(function(){apply(lang);});});attachHandlers();}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}})();`;
 
 export default function RootLayout({
   children,
@@ -96,6 +104,7 @@ export default function RootLayout({
         {children}
         <script dangerouslySetInnerHTML={{ __html: themeToggleScript }} />
         <script dangerouslySetInnerHTML={{ __html: counterScript }} />
+        <script dangerouslySetInnerHTML={{ __html: i18nScript }} />
       </body>
     </html>
   );

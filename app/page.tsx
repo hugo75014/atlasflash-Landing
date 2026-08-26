@@ -1,4 +1,18 @@
 import type { Metadata } from "next";
+import { LANGS, t as _t } from "./i18n";
+import { EDITEUR } from "./legal/shared";
+
+/* ------------------------------------------------------------------ */
+/* i18n text helper — wraps the translation with suppressHydrationWarning  */
+/* so the runtime language-swap doesn't trip React's hydration check.   */
+/* ------------------------------------------------------------------ */
+function T({ k, children }: { k: string; children?: React.ReactNode }) {
+  return (
+    <span data-i18n={k} suppressHydrationWarning>
+      {children ?? _t(k)}
+    </span>
+  );
+}
 
 import { EDITEUR } from "./legal/shared";
 
@@ -240,6 +254,80 @@ function IconMoon() {
   );
 }
 
+function IconChevronDown({ className = "h-3 w-3" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 16 16" className={className} aria-hidden="true" fill="none">
+      <path
+        d="M4 6l4 4 4-4"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function IconGlobe({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="none">
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />
+      <path
+        d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function LanguageSelector() {
+  return (
+    <div className="lang-shell">
+      <button
+        type="button"
+        data-lang-toggle
+        aria-haspopup="menu"
+        aria-expanded="false"
+        aria-label="Choisir la langue"
+        title="Choisir la langue"
+        className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-ink-200 bg-surface px-2.5 text-[12px] font-medium text-ink-700 transition-colors duration-200 hover:bg-ink-50 hover:text-ink-900 dark:hover:bg-ink-100"
+      >
+        <IconGlobe className="h-3.5 w-3.5 text-ink-500" />
+        <span data-lang-current className="font-semibold tracking-wide">
+          FR
+        </span>
+        <IconChevronDown className="h-2.5 w-2.5 text-ink-400" />
+      </button>
+      <div
+        data-lang-menu
+        data-open="false"
+        role="menu"
+        className="absolute right-0 top-full z-50 mt-2 hidden w-44 flex-col gap-0.5 p-1 data-[open=true]:flex"
+      >
+        <div className="lang-menu flex flex-col gap-0.5">
+          {LANGS.map((l) => (
+            <button
+              key={l.code}
+              type="button"
+              data-lang-option={l.code}
+              role="menuitemradio"
+              aria-checked="false"
+              className="lang-option"
+            >
+              <span>{l.native}</span>
+              <span className="text-[11px] uppercase tracking-wider text-ink-400">
+                {l.short}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /* The big Schema SVG — the heart of the page                          */
 /* ------------------------------------------------------------------ */
@@ -250,6 +338,7 @@ function SchemaDiagram() {
       viewBox="0 0 940 540"
       role="img"
       aria-label="Schéma de fonctionnement d'Atlas : votre application envoie une requête, Atlas route automatiquement vers les fournisseurs, et active un Smart Fallback en cas de quota atteint."
+      data-i18n-attr="schema.aria"
       className="w-full h-auto"
     >
       <defs>
@@ -316,7 +405,8 @@ function SchemaDiagram() {
           fontSize="13"
           fontWeight="500"
           style={{ fill: "rgb(var(--ink-900))" }}
-        >
+          data-i18n="schema.app"
+         suppressHydrationWarning>
           Votre application
         </text>
         <text
@@ -417,7 +507,8 @@ function SchemaDiagram() {
           fontSize="20"
           fontWeight="600"
           style={{ fill: "rgb(var(--ink-950))" }}
-        >
+          data-i18n="schema.atlas.title"
+         suppressHydrationWarning>
           Smart Routing Engine
         </text>
         <text
@@ -427,7 +518,8 @@ function SchemaDiagram() {
           fontFamily="ui-sans-serif, system-ui, sans-serif"
           fontSize="12"
           style={{ fill: "rgb(var(--ink-500))" }}
-        >
+          data-i18n="schema.atlas.subtitle"
+         suppressHydrationWarning>
           1 clé API · 1 endpoint · catalogue complet
         </text>
       </g>
@@ -504,7 +596,8 @@ function SchemaDiagram() {
           fontSize="11"
           fontWeight="500"
           fill="#dc2626"
-        >
+          data-i18n="schema.quota"
+         suppressHydrationWarning>
           quota atteint
         </text>
       </g>
@@ -555,7 +648,8 @@ function SchemaDiagram() {
           fontSize="14"
           fontWeight="600"
           style={{ fill: "rgb(var(--ink-950))" }}
-        >
+          data-i18n="schema.smart"
+         suppressHydrationWarning>
           Smart Fallback
         </text>
         <text
@@ -564,7 +658,8 @@ function SchemaDiagram() {
           fontFamily="ui-sans-serif, system-ui, sans-serif"
           fontSize="11.5"
           style={{ fill: "rgb(var(--ink-500))" }}
-        >
+          data-i18n="schema.smart.subtitle"
+         suppressHydrationWarning>
           Bascule automatique
         </text>
       </g>
@@ -635,7 +730,8 @@ function SchemaDiagram() {
           fontSize="11"
           fontWeight="500"
           style={{ fill: "rgb(var(--ink-500))" }}
-        >
+          data-i18n="schema.response"
+         suppressHydrationWarning>
           Réponse retournée
         </text>
       </g>
@@ -689,16 +785,23 @@ function TopNav() {
       className="nav-shell sticky top-0 z-40 border-b border-transparent bg-bg/80 backdrop-blur supports-[backdrop-filter]:bg-bg/70"
     >
       <div className="container-page flex h-14 items-center justify-between">
-        <a href="/" className="flex items-center gap-2 text-ink-950" aria-label="Atlas — Accueil">
+        <a
+          href="/"
+          data-i18n-aria-label="nav.home"
+          aria-label="Atlas — Accueil"
+          className="flex items-center gap-2 text-ink-950"
+        >
           <AtlasMark className="h-7 w-7" />
           <span className="text-[15px] font-semibold tracking-tight">Atlas</span>
         </a>
         <nav className="flex items-center gap-1.5 sm:gap-2">
+          <LanguageSelector />
           <button
             type="button"
             data-theme-toggle
+            data-i18n-aria-label="nav.theme"
             aria-label="Basculer entre le mode clair et le mode sombre"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-ink-200 bg-surface text-ink-700 transition-colors duration-150 hover:bg-ink-50 hover:text-ink-900 dark:hover:bg-ink-100"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-ink-200 bg-surface text-ink-700 transition-colors duration-200 hover:bg-ink-50 hover:text-ink-900 dark:hover:bg-ink-100"
           >
             <span className="block dark:hidden" aria-hidden="true">
               <IconMoon />
@@ -707,10 +810,18 @@ function TopNav() {
               <IconSun />
             </span>
           </button>
-          <a href="https://app.atlasflash.com/signin" className="btn-secondary h-9 px-3.5 text-[13px]">
+          <a
+            href="https://app.atlasflash.com/signin"
+            data-i18n="nav.signin"
+            className="btn-secondary h-9 px-3.5 text-[13px] hidden sm:inline-flex"
+           suppressHydrationWarning>
             Se connecter
           </a>
-          <a href="https://app.atlasflash.com/signin" className="btn-primary h-9 px-3.5 text-[13px]">
+          <a
+            href="https://app.atlasflash.com/signin"
+            data-i18n="nav.signup"
+            className="btn-primary h-9 px-3.5 text-[13px]"
+           suppressHydrationWarning>
             Créer un compte
           </a>
         </nav>
@@ -739,15 +850,21 @@ function Hero() {
 
       <div className="container-page relative pt-20 pb-16 sm:pt-28 sm:pb-20">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="h-eyebrow" data-reveal style={{ "--reveal-delay": "0ms" } as React.CSSProperties}>
+          <p
+            className="h-eyebrow"
+            data-reveal
+            data-i18n="hero.eyebrow"
+            style={{ "--reveal-delay": "0ms" } as React.CSSProperties}
+           suppressHydrationWarning>
             Atlas · AI Gateway
           </p>
 
           <h1
             className="mt-6 h-display text-balance"
             data-reveal
+            data-i18n="hero.title"
             style={{ "--reveal-delay": "80ms" } as React.CSSProperties}
-          >
+           suppressHydrationWarning>
             <span className="hero-reveal-word" style={{ "--word-delay": "120ms" } as React.CSSProperties}>
               Une
             </span>{" "}
@@ -783,8 +900,9 @@ function Hero() {
           <p
             className="mx-auto mt-6 max-w-2xl text-lead text-pretty"
             data-reveal
+            data-i18n="hero.subtitle"
             style={{ "--reveal-delay": "320ms" } as React.CSSProperties}
-          >
+           suppressHydrationWarning>
             Atlas orchestre automatiquement les meilleurs fournisseurs d&apos;IA.
             Il utilise les crédits gratuits disponibles, bascule intelligemment
             lorsqu&apos;un quota est atteint et vous évite toute la complexité
@@ -797,11 +915,19 @@ function Hero() {
             data-reveal
             style={{ "--reveal-delay": "440ms" } as React.CSSProperties}
           >
-            <a href="https://app.atlasflash.com/signin" className="btn-primary h-11 w-full sm:w-auto px-5 text-[14px]">
+            <a
+              href="https://app.atlasflash.com/signin"
+              data-i18n="hero.cta.primary"
+              className="btn-primary h-11 w-full sm:w-auto px-5 text-[14px]"
+             suppressHydrationWarning>
               Créer ma clé API gratuitement
               <IconArrowRight />
             </a>
-            <a href="https://app.atlasflash.com/signin" className="btn-secondary h-11 w-full sm:w-auto px-5 text-[14px]">
+            <a
+              href="https://app.atlasflash.com/signin"
+              data-i18n="hero.cta.secondary"
+              className="btn-secondary h-11 w-full sm:w-auto px-5 text-[14px]"
+             suppressHydrationWarning>
               Se connecter
             </a>
           </div>
@@ -814,15 +940,15 @@ function Hero() {
           >
             <li className="flex items-center gap-1.5">
               <IconCheck className="h-3.5 w-3.5 text-ink-700" />
-              Sans carte bancaire
+              <span data-i18n="hero.trust.1" suppressHydrationWarning>Sans carte bancaire</span>
             </li>
             <li className="flex items-center gap-1.5">
               <IconCheck className="h-3.5 w-3.5 text-ink-700" />
-              Compatible OpenAI
+              <span data-i18n="hero.trust.2" suppressHydrationWarning>Compatible OpenAI</span>
             </li>
             <li className="flex items-center gap-1.5">
               <IconCheck className="h-3.5 w-3.5 text-ink-700" />
-              Compte créé en moins d&apos;une minute
+              <span data-i18n="hero.trust.3" suppressHydrationWarning>Compte créé en moins d&apos;une minute</span>
             </li>
           </ul>
         </div>
@@ -848,11 +974,11 @@ function Hero() {
 
 function ProofBand() {
   const items = [
-    { value: "160+", label: "fournisseurs", count: 160, suffix: "+" },
-    { value: "Des centaines", label: "de modèles", text: true },
-    { value: "OpenAI", label: "compatible", text: true },
-    { value: "Smart Fallback", label: "automatique", text: true },
-    { value: "Gratuit", label: "avant le payant", text: true },
+    { type: "count", valueKey: "proof.1.value", labelKey: "proof.1.label", count: 160, suffix: "+" },
+    { type: "text",  valueKey: "proof.2.value", labelKey: "proof.2.label" },
+    { type: "text",  valueKey: "proof.3.value", labelKey: "proof.3.label" },
+    { type: "text",  valueKey: "proof.4.value", labelKey: "proof.4.label" },
+    { type: "text",  valueKey: "proof.5.value", labelKey: "proof.5.label" },
   ];
 
   return (
@@ -861,26 +987,39 @@ function ProofBand() {
         <ul className="grid grid-cols-2 gap-y-8 sm:grid-cols-3 lg:grid-cols-5" data-reveal-group>
           {items.map((it, i) => (
             <li
-              key={it.label}
+              key={it.labelKey}
               className="flex flex-col items-center text-center"
               data-reveal
               style={{ "--reveal-delay": `${i * 90}ms` } as React.CSSProperties}
             >
               <span className="text-[1.5rem] font-semibold tracking-tight text-ink-950 sm:text-2xl">
-                {"text" in it ? (
-                  it.value
+                {it.type === "text" ? (
+                  <span data-i18n={it.valueKey}>
+                    {it.valueKey === "proof.2.value" ? "Des centaines"
+                      : it.valueKey === "proof.3.value" ? "OpenAI"
+                      : it.valueKey === "proof.4.value" ? "Smart Fallback"
+                      : "Gratuit"}
+                  </span>
                 ) : (
                   <span
                     data-count
                     data-count-to={it.count}
                     data-count-suffix={it.suffix || ""}
+                    data-i18n-num={it.valueKey}
                   >
                     0{it.suffix || ""}
                   </span>
                 )}
               </span>
-              <span className="mt-1 text-[12.5px] uppercase tracking-[0.12em] text-ink-500">
-                {it.label}
+              <span
+                className="mt-1 text-[12.5px] uppercase tracking-[0.12em] text-ink-500"
+                data-i18n={it.labelKey}
+              >
+                {it.labelKey === "proof.1.label" ? "fournisseurs"
+                  : it.labelKey === "proof.2.label" ? "de modèles"
+                  : it.labelKey === "proof.3.label" ? "compatible"
+                  : it.labelKey === "proof.4.label" ? "automatique"
+                  : "avant le payant"}
               </span>
             </li>
           ))}
@@ -962,22 +1101,22 @@ function DesignedToSave() {
 
 function WhyAtlas() {
   const rows = [
-    ["Plusieurs comptes", "Une seule clé API"],
-    ["Plusieurs APIs", "Un seul endpoint"],
-    ["Gestion manuelle des quotas", "Automatique"],
-    ["Erreurs 429", "Smart Fallback"],
-    ["Changement de fournisseur", "Transparent"],
-    ["Paiement immédiat", "Gratuit d&apos;abord"],
+    { w: "Plusieurs comptes", a: "Une seule clé API", wKey: "why.row.1.without", aKey: "why.row.1.with" },
+    { w: "Plusieurs APIs", a: "Un seul endpoint", wKey: "why.row.2.without", aKey: "why.row.2.with" },
+    { w: "Gestion manuelle des quotas", a: "Automatique", wKey: "why.row.3.without", aKey: "why.row.3.with" },
+    { w: "Erreurs 429", a: "Smart Fallback", wKey: "why.row.4.without", aKey: "why.row.4.with" },
+    { w: "Changement de fournisseur", a: "Transparent", wKey: "why.row.5.without", aKey: "why.row.5.with" },
+    { w: "Paiement immédiat", a: "Gratuit d'abord", wKey: "why.row.6.without", aKey: "why.row.6.with" },
   ];
 
   return (
     <section className="container-page py-20 sm:py-28">
       <div className="mx-auto max-w-2xl text-center" data-reveal>
-        <p className="h-eyebrow">Pourquoi Atlas</p>
-        <h2 className="mt-4 h-section text-balance">
+        <p className="h-eyebrow" data-i18n="why.eyebrow" suppressHydrationWarning>Pourquoi Atlas</p>
+        <h2 className="mt-4 h-section text-balance" data-i18n="why.title" suppressHydrationWarning>
           L&apos;infrastructure IA, sans la complexité.
         </h2>
-        <p className="mt-4 text-lead text-pretty">
+        <p className="mt-4 text-lead text-pretty" data-i18n="why.subtitle" suppressHydrationWarning>
           Atlas remplace la gestion d&apos;une dizaines de fournisseurs par
           une seule interface fiable et unifiée.
         </p>
@@ -986,15 +1125,15 @@ function WhyAtlas() {
       <div className="mx-auto mt-12 max-w-3xl">
         <div className="card overflow-hidden">
           <div className="grid grid-cols-2 border-b border-ink-200 bg-ink-50/60 text-[12.5px] uppercase tracking-[0.14em] text-ink-500">
-            <div className="px-5 py-3 sm:px-6">Sans Atlas</div>
-            <div className="border-l border-ink-200 px-5 py-3 sm:px-6 text-ink-700">
+            <div className="px-5 py-3 sm:px-6" data-i18n="why.col.without" suppressHydrationWarning>Sans Atlas</div>
+            <div className="border-l border-ink-200 px-5 py-3 sm:px-6 text-ink-700" data-i18n="why.col.with" suppressHydrationWarning>
               Avec Atlas
             </div>
           </div>
           <ul data-reveal-group>
-            {rows.map(([without, withAtlas], i) => (
+            {rows.map((r, i) => (
               <li
-                key={without}
+                key={r.w}
                 className="grid grid-cols-2 border-b border-ink-200 last:border-b-0"
                 data-reveal
                 style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
@@ -1003,16 +1142,13 @@ function WhyAtlas() {
                   <span className="mt-0.5 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full border border-ink-200 text-ink-400">
                     <IconX className="h-3 w-3" />
                   </span>
-                  <span className="text-[14.5px] text-ink-600">{without}</span>
+                  <span className="text-[14.5px] text-ink-600" data-i18n={r.wKey}>{r.w}</span>
                 </div>
                 <div className="flex items-start gap-3 border-l border-ink-200 bg-ink-100/30 px-5 py-4 sm:px-6">
                   <span className="mt-0.5 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-ink-950 text-ink-50">
                     <IconCheck className="h-3 w-3" />
                   </span>
-                  <span
-                    className="text-[14.5px] text-ink-900"
-                    dangerouslySetInnerHTML={{ __html: withAtlas }}
-                  />
+                  <span className="text-[14.5px] text-ink-900" data-i18n={r.aKey}>{r.a}</span>
                 </div>
               </li>
             ))}
@@ -1031,21 +1167,29 @@ function Features() {
   const features = [
     {
       icon: <IconRouting />,
+      titleKey: "features.1.title",
+      bodyKey: "features.1.body",
       title: "Smart Routing",
       body: "Atlas choisit automatiquement le meilleur fournisseur selon la disponibilité, les performances et les quotas.",
     },
     {
       icon: <IconFree />,
+      titleKey: "features.2.title",
+      bodyKey: "features.2.body",
       title: "Gratuit d'abord",
       body: "Atlas exploite automatiquement les crédits gratuits disponibles avant d'utiliser des ressources payantes.",
     },
     {
       icon: <IconFallback />,
+      titleKey: "features.3.title",
+      bodyKey: "features.3.body",
       title: "Smart Fallback",
       body: "Si un fournisseur tombe en panne, atteint son quota ou devient indisponible, Atlas bascule automatiquement. Votre application continue de fonctionner.",
     },
     {
       icon: <IconUnify />,
+      titleKey: "features.4.title",
+      bodyKey: "features.4.body",
       title: "Une seule API",
       body: "Plus besoin de maintenir plusieurs SDK. Une seule API compatible OpenAI pour tout le catalogue.",
     },
@@ -1055,8 +1199,8 @@ function Features() {
     <section className="border-y border-ink-200/70 bg-ink-50/30 dark:bg-ink-100/20">
       <div className="container-page py-20 sm:py-28">
         <div className="mx-auto max-w-2xl text-center" data-reveal>
-          <p className="h-eyebrow">Ce qu&apos;Atlas fait automatiquement</p>
-          <h2 className="mt-4 h-section text-balance">
+          <p className="h-eyebrow" data-i18n="features.eyebrow" suppressHydrationWarning>Ce qu&apos;Atlas fait automatiquement</p>
+          <h2 className="mt-4 h-section text-balance" data-i18n="features.title" suppressHydrationWarning>
             Quatre mécanismes. Zéro configuration.
           </h2>
         </div>
@@ -1067,7 +1211,7 @@ function Features() {
         >
           {features.map((f, i) => (
             <li
-              key={f.title}
+              key={f.titleKey}
               className="glass-card shine-on-hover bg-surface p-6 sm:p-8"
               data-reveal
               style={{ "--reveal-delay": `${i * 100}ms` } as React.CSSProperties}
@@ -1075,10 +1219,10 @@ function Features() {
               <div className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-ink-200 text-ink-900">
                 {f.icon}
               </div>
-              <h3 className="mt-5 text-[17px] font-semibold tracking-tight text-ink-950">
+              <h3 className="mt-5 text-[17px] font-semibold tracking-tight text-ink-950" data-i18n={f.titleKey}>
                 {f.title}
               </h3>
-              <p className="mt-2 text-[14.5px] leading-[1.6] text-ink-600">
+              <p className="mt-2 text-[14.5px] leading-[1.6] text-ink-600" data-i18n={f.bodyKey}>
                 {f.body}
               </p>
             </li>
@@ -1095,24 +1239,24 @@ function Features() {
 
 function CompatibleTools() {
   const tools = [
-    "Claude Code",
-    "Hermes Agent",
-    "OpenClaw",
-    "Cursor",
-    "Cline",
-    "Roo Code",
-    "Windsurf",
-    "Autres clients compatibles OpenAI",
+    { label: "Hermes Agent", key: "tools.1" },
+    { label: "OpenClaw", key: "tools.2" },
+    { label: "Claude Code", key: "tools.3" },
+    { label: "Continue.dev", key: "tools.4" },
+    { label: "Roo Code", key: "tools.5" },
+    { label: "Cursor", key: "tools.6" },
+    { label: "Windsurf", key: "tools.7" },
+    { label: "Tous les clients OpenAI", key: "tools.8" },
   ];
 
   return (
     <section className="container-page py-20 sm:py-28">
       <div className="mx-auto max-w-2xl text-center" data-reveal>
-        <p className="h-eyebrow">Compatible avec vos outils</p>
-        <h2 className="mt-4 h-section text-balance">
+        <p className="h-eyebrow" data-i18n="tools.eyebrow" suppressHydrationWarning>Compatible avec vos outils</p>
+        <h2 className="mt-4 h-section text-balance" data-i18n="tools.title" suppressHydrationWarning>
           Un seul point de remplacement. Tout le reste suit.
         </h2>
-        <p className="mt-4 text-lead text-pretty">
+        <p className="mt-4 text-lead text-pretty" data-i18n="tools.subtitle" suppressHydrationWarning>
           Atlas expose une interface strictement compatible OpenAI. Vos outils,
           SDK et frameworks existants fonctionnent sans modification.
         </p>
@@ -1124,12 +1268,12 @@ function CompatibleTools() {
       >
         {tools.map((t, i) => (
           <li
-            key={t}
+            key={t.label}
             className="glass-card shine-on-hover card flex h-16 items-center justify-center px-4 text-center text-[13.5px] font-medium text-ink-800"
             data-reveal
             style={{ "--reveal-delay": `${i * 60}ms` } as React.CSSProperties}
           >
-            {t}
+            {t.label}
           </li>
         ))}
       </ul>
@@ -1145,13 +1289,13 @@ function CompatibleTools() {
                 .env
               </span>
             </div>
-            <span className="text-[11.5px] uppercase tracking-[0.14em] text-ink-400">
-              Deux variables
+            <span className="text-[11.5px] uppercase tracking-[0.14em] text-ink-400" data-i18n="tools.filename" suppressHydrationWarning>
+              .env
             </span>
           </div>
           <pre className="overflow-x-auto bg-surface p-5 font-mono text-[13px] leading-[1.7] text-ink-900 sm:p-6">
             <code>
-              <span className="text-ink-400"># 1. Point your base URL to Atlas</span>
+              <span className="text-ink-400" data-i18n="tools.code.comment1" suppressHydrationWarning># 1. Point your base URL to Atlas</span>
               {"\n"}
               <span className="text-ink-500">export</span>{" "}
               <span className="text-ink-950">OPENAI_BASE_URL</span>=
@@ -1159,7 +1303,7 @@ function CompatibleTools() {
                 https://app.atlasflash.com/api/v1
               </span>
               {"\n\n"}
-              <span className="text-ink-400"># 2. Use your Atlas key</span>
+              <span className="text-ink-400" data-i18n="tools.code.comment2" suppressHydrationWarning># 2. Use your Atlas key</span>
               {"\n"}
               <span className="text-ink-500">export</span>{" "}
               <span className="text-ink-950">OPENAI_API_KEY</span>=
@@ -1167,7 +1311,7 @@ function CompatibleTools() {
             </code>
           </pre>
         </div>
-        <p className="mt-4 text-center text-[13.5px] text-ink-500">
+        <p className="mt-4 text-center text-[13.5px] text-ink-500" data-i18n="tools.caption" suppressHydrationWarning>
           Deux variables d&apos;environnement. Rien d&apos;autre à modifier.
         </p>
       </div>
@@ -1183,16 +1327,22 @@ function HowItWorks() {
   const steps = [
     {
       n: "1",
+      titleKey: "how.1.title",
+      bodyKey: "how.1.body",
       title: "Créer gratuitement votre compte Atlas",
       body: "Inscription en moins d'une minute. Aucune carte bancaire requise.",
     },
     {
       n: "2",
+      titleKey: "how.2.title",
+      bodyKey: "how.2.body",
       title: "Récupérer votre clé API",
       body: "Une seule clé. Compatible avec n'importe quel client OpenAI.",
     },
     {
       n: "3",
+      titleKey: "how.3.title",
+      bodyKey: "how.3.body",
       title: "Atlas choisit automatiquement le meilleur fournisseur",
       body: "Vous ne changez rien à votre code. Atlas orchestre tout pour vous.",
     },
@@ -1202,8 +1352,8 @@ function HowItWorks() {
     <section className="border-y border-ink-200/70 bg-ink-50/30 dark:bg-ink-100/20">
       <div className="container-page py-20 sm:py-28">
         <div className="mx-auto max-w-2xl text-center" data-reveal>
-          <p className="h-eyebrow">Comment ça fonctionne</p>
-          <h2 className="mt-4 h-section text-balance">
+          <p className="h-eyebrow" data-i18n="how.eyebrow" suppressHydrationWarning>Comment ça fonctionne</p>
+          <h2 className="mt-4 h-section text-balance" data-i18n="how.title" suppressHydrationWarning>
             Trois étapes. Aucun changement de code.
           </h2>
         </div>
@@ -1220,10 +1370,10 @@ function HowItWorks() {
                 <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-ink-950 font-mono text-[12.5px] font-medium text-ink-50">
                   {s.n}
                 </span>
-                <h3 className="mt-5 text-[16px] font-semibold tracking-tight text-ink-950">
+                <h3 className="mt-5 text-[16px] font-semibold tracking-tight text-ink-950" data-i18n={s.titleKey}>
                   {s.title}
                 </h3>
-                <p className="mt-2 text-[14px] leading-[1.6] text-ink-600">
+                <p className="mt-2 text-[14px] leading-[1.6] text-ink-600" data-i18n={s.bodyKey}>
                   {s.body}
                 </p>
               </div>
@@ -1251,6 +1401,11 @@ function Pricing() {
   const plans = [
     {
       key: "free",
+      nameKey: "pricing.free.name",
+      priceKey: "pricing.free.price",
+      cadenceKey: "pricing.free.cadence",
+      bodyKey: "pricing.free.body",
+      ctaKey: "pricing.free.cta",
       name: "Free",
       price: "0 €",
       cadence: "à vie",
@@ -1261,6 +1416,11 @@ function Pricing() {
     },
     {
       key: "pro",
+      nameKey: "pricing.pro.name",
+      priceKey: "pricing.pro.price",
+      cadenceKey: "pricing.pro.cadence",
+      bodyKey: "pricing.pro.body",
+      ctaKey: "pricing.pro.cta",
       name: "Pro",
       price: "5 €",
       cadence: "/ mois",
@@ -1272,6 +1432,11 @@ function Pricing() {
     },
     {
       key: "unlimited",
+      nameKey: "pricing.unlimited.name",
+      priceKey: "pricing.unlimited.price",
+      cadenceKey: "pricing.unlimited.cadence",
+      bodyKey: "pricing.unlimited.body",
+      ctaKey: "pricing.unlimited.cta",
       name: "Unlimited",
       price: "10 €",
       cadence: "/ mois",
@@ -1282,45 +1447,54 @@ function Pricing() {
     },
   ];
 
-  // Tableau tarifaire — à afficher tel quel
-  const rows: { label: string; free: React.ReactNode; pro: React.ReactNode; unlimited: React.ReactNode }[] = [
+  // Tableau tarifaire
+  const rows: { labelKey: string; free: React.ReactNode; pro: React.ReactNode; unlimited: React.ReactNode; label: string }[] = [
     {
+      labelKey: "pricing.row.1",
       label: "Clé API Atlas, utilisable dans tout IDE",
       free: <CheckCell />,
       pro: <CheckCell />,
       unlimited: <CheckCell />,
     },
     {
+      labelKey: "pricing.row.2",
       label: "Démarrage sans aucune clé fournisseur",
       free: <CheckCell />,
       pro: <CheckCell />,
       unlimited: <CheckCell />,
     },
     {
+      labelKey: "pricing.row.3",
       label: "Connexions fournisseur",
       free: "10",
       pro: "50",
-      unlimited: <span className="font-semibold text-ink-950 dark:text-ink-50">illimité</span>,
+      unlimited: <span className="font-semibold text-ink-950 dark:text-ink-50" data-i18n="pricing.row.3.unlimited" suppressHydrationWarning>illimité</span>,
     },
     {
+<<<<<<< HEAD
       label: "Outils CLI installés en un clic",
       free: "1",
       pro: "5",
       unlimited: <span className="font-semibold text-ink-950 dark:text-ink-50">illimité</span>,
     },
     {
+=======
+      labelKey: "pricing.row.4",
+>>>>>>> aaeec1e (redesign + i18n: 5 languages, dark mode, new design system)
       label: "Plafond de tokens / requêtes",
-      free: <span className="text-ink-500">aucun</span>,
-      pro: <span className="text-ink-500">aucun</span>,
-      unlimited: <span className="text-ink-500">aucun</span>,
+      free: <span className="text-ink-500" data-i18n="pricing.row.4.any" suppressHydrationWarning>aucun</span>,
+      pro: <span className="text-ink-500" data-i18n="pricing.row.4.any" suppressHydrationWarning>aucun</span>,
+      unlimited: <span className="text-ink-500" data-i18n="pricing.row.4.any" suppressHydrationWarning>aucun</span>,
     },
     {
+      labelKey: "pricing.row.5",
       label: "Routage intelligent + repli automatique",
       free: <CheckCell />,
       pro: <CheckCell />,
       unlimited: <CheckCell />,
     },
     {
+      labelKey: "pricing.row.6",
       label: "Format OpenAI /v1/chat/completions",
       free: <CheckCell />,
       pro: <CheckCell />,
@@ -1331,11 +1505,11 @@ function Pricing() {
   return (
     <section id="pricing" className="container-page py-20 sm:py-28">
       <div className="mx-auto max-w-2xl text-center" data-reveal>
-        <p className="h-eyebrow">Tarifs</p>
-        <h2 className="mt-4 h-section text-balance">
+        <p className="h-eyebrow" data-i18n="pricing.eyebrow" suppressHydrationWarning>Tarifs</p>
+        <h2 className="mt-4 h-section text-balance" data-i18n="pricing.title" suppressHydrationWarning>
           Un seul curseur : combien de fournisseurs tu branches.
         </h2>
-        <p className="mt-4 text-lead text-pretty">
+        <p className="mt-4 text-lead text-pretty" data-i18n="pricing.subtitle" suppressHydrationWarning>
           Atlas ne vend pas de tokens. Tes clés appellent tes comptes, ta
           facture reste la tienne. On ne plafonne jamais ta consommation — la
           seule limite est celle de ton fournisseur.
@@ -1357,30 +1531,31 @@ function Pricing() {
             }
           >
             {p.badge && (
-              <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-ink-950 px-2.5 py-0.5 text-[10.5px] font-medium uppercase tracking-[0.12em] text-ink-50 dark:bg-ink-50 dark:text-ink-950">
+              <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-ink-950 px-2.5 py-0.5 text-[10.5px] font-medium uppercase tracking-[0.12em] text-ink-50 dark:bg-ink-50 dark:text-ink-950" data-i18n="pricing.badge" suppressHydrationWarning>
                 {p.badge}
               </span>
             )}
 
             <div>
-              <h3 className="text-[15px] font-semibold tracking-tight text-ink-950">
+              <h3 className="text-[15px] font-semibold tracking-tight text-ink-950" data-i18n={p.nameKey}>
                 {p.name}
               </h3>
               <div className="mt-4 flex items-baseline gap-1.5">
-                <span className="text-[2.5rem] font-semibold tracking-tightest text-ink-950">
+                <span className="text-[2.5rem] font-semibold tracking-tightest text-ink-950" data-i18n={p.priceKey}>
                   {p.price}
                 </span>
-                <span className="text-[13.5px] text-ink-500">{p.cadence}</span>
+                <span className="text-[13.5px] text-ink-500" data-i18n={p.cadenceKey}>{p.cadence}</span>
               </div>
             </div>
 
-            <p className="mt-4 text-[14px] leading-[1.6] text-ink-600">
+            <p className="mt-4 text-[14px] leading-[1.6] text-ink-600" data-i18n={p.bodyKey}>
               {p.description}
             </p>
 
             <div className="mt-6 pt-2">
               <a
                 href={p.cta.href}
+                data-i18n={p.ctaKey}
                 className={
                   p.cta.variant === "primary"
                     ? "btn-primary h-10 w-full text-[13.5px]"
@@ -1398,24 +1573,24 @@ function Pricing() {
       <div className="mx-auto mt-14 max-w-4xl">
         <div className="card overflow-hidden">
           <div className="grid grid-cols-[1.5fr_1fr_1fr_1fr] border-b border-ink-200 bg-ink-50/40 text-[12px] uppercase tracking-[0.1em] text-ink-500 dark:bg-ink-100/30">
-            <div className="px-4 py-3 sm:px-5">Feature</div>
-            <div className="border-l border-ink-200 px-3 py-3 text-center sm:px-4">
-              Free — 0 €
+            <div className="px-4 py-3 sm:px-5" data-i18n="pricing.feature" suppressHydrationWarning>Feature</div>
+            <div className="border-l border-ink-200 px-3 py-3 text-center sm:px-4" data-i18n="pricing.col.free" suppressHydrationWarning>
+              Free
             </div>
-            <div className="border-l border-ink-200 bg-ink-50/60 px-3 py-3 text-center text-ink-900 sm:px-4 dark:bg-ink-100/40">
-              Pro — 5 €/mois
+            <div className="border-l border-ink-200 bg-ink-50/60 px-3 py-3 text-center text-ink-900 sm:px-4 dark:bg-ink-100/40" data-i18n="pricing.col.pro" suppressHydrationWarning>
+              Pro
             </div>
-            <div className="border-l border-ink-200 px-3 py-3 text-center sm:px-4">
-              Unlimited — 10 €/mois
+            <div className="border-l border-ink-200 px-3 py-3 text-center sm:px-4" data-i18n="pricing.col.unlimited" suppressHydrationWarning>
+              Unlimited
             </div>
           </div>
           <ul>
             {rows.map((r) => (
               <li
-                key={r.label}
+                key={r.labelKey}
                 className="grid grid-cols-[1.5fr_1fr_1fr_1fr] border-b border-ink-200 last:border-b-0"
               >
-                <div className="flex items-center px-4 py-3.5 text-[13.5px] text-ink-700 sm:px-5">
+                <div className="flex items-center px-4 py-3.5 text-[13.5px] text-ink-700 sm:px-5" data-i18n={r.labelKey}>
                   {r.label}
                 </div>
                 <div className="flex items-center justify-center border-l border-ink-200 px-3 text-center text-[13.5px] text-ink-700 sm:px-4">
@@ -1431,7 +1606,7 @@ function Pricing() {
             ))}
           </ul>
         </div>
-        <p className="mt-4 text-center text-[12.5px] text-ink-500">
+        <p className="mt-4 text-center text-[12.5px] text-ink-500" data-i18n="pricing.source" suppressHydrationWarning>
           Source unique : control-plane/src/plans/catalogue.ts. Aucun plafond de
           tokens, jamais.
         </p>
@@ -1465,44 +1640,29 @@ function CheckCell() {
 
 function Faq() {
   const items = [
-    {
-      q: "Est-ce vraiment gratuit ?",
-      a: "Oui. Atlas exploite automatiquement les crédits gratuits offerts par les fournisseurs avant d'utiliser des ressources payantes. Vous ne payez que ce qu'Atlas ne peut pas couvrir gratuitement.",
-    },
-    {
-      q: "Dois-je modifier mon code ?",
-      a: "Non. Atlas expose une interface strictement compatible OpenAI. Il suffit de changer deux variables d'environnement (OPENAI_BASE_URL et OPENAI_API_KEY) et votre code reste inchangé.",
-    },
-    {
-      q: "Que se passe-t-il lorsqu'un quota est atteint ?",
-      a: "Atlas bascule automatiquement vers un autre fournisseur disponible grâce à son Smart Fallback. Votre application reçoit une réponse sans erreur 429 et sans intervention manuelle.",
-    },
-    {
-      q: "Mes clés API sont-elles sécurisées ?",
-      a: "Les clés sont chiffrées au repos, isolées par compte, et ne sont jamais exposées au client. L'accès à l'API se fait exclusivement via votre clé Atlas.",
-    },
-    {
-      q: "Puis-je utiliser mes propres fournisseurs ?",
-      a: "Atlas orchestre un large catalogue de fournisseurs par défaut. L'ajout de clés personnelles est en cours et sera disponible prochainement.",
-    },
+    { qKey: "faq.1.q", aKey: "faq.1.a", q: "Est-ce vraiment gratuit ?", a: "Oui. Atlas exploite automatiquement les crédits gratuits offerts par les fournisseurs avant d'utiliser des ressources payantes. Vous ne payez que ce qu'Atlas ne peut pas couvrir gratuitement." },
+    { qKey: "faq.2.q", aKey: "faq.2.a", q: "Dois-je modifier mon code ?", a: "Non. Atlas expose une interface strictement compatible OpenAI. Il suffit de changer deux variables d'environnement (OPENAI_BASE_URL et OPENAI_API_KEY) et votre code reste inchangé." },
+    { qKey: "faq.3.q", aKey: "faq.3.a", q: "Que se passe-t-il lorsqu'un quota est atteint ?", a: "Atlas bascule automatiquement vers un autre fournisseur disponible grâce à son Smart Fallback. Votre application reçoit une réponse sans erreur 429 et sans intervention manuelle." },
+    { qKey: "faq.4.q", aKey: "faq.4.a", q: "Mes clés API sont-elles sécurisées ?", a: "Les clés sont chiffrées au repos, isolées par compte, et ne sont jamais exposées au client. L'accès à l'API se fait exclusivement via votre clé Atlas." },
+    { qKey: "faq.5.q", aKey: "faq.5.a", q: "Puis-je utiliser mes propres fournisseurs ?", a: "Atlas orchestre un large catalogue de fournisseurs par défaut. L'ajout de clés personnelles est en cours et sera disponible prochainement." },
   ];
 
   return (
     <section className="container-page py-20 sm:py-28">
       <div className="mx-auto max-w-2xl text-center" data-reveal>
-        <p className="h-eyebrow">Questions fréquentes</p>
-        <h2 className="mt-4 h-section text-balance">Tout ce qu&apos;il faut savoir.</h2>
+        <p className="h-eyebrow" data-i18n="faq.eyebrow" suppressHydrationWarning>Questions fréquentes</p>
+        <h2 className="mt-4 h-section text-balance" data-i18n="faq.title" suppressHydrationWarning>Tout ce qu&apos;il faut savoir.</h2>
       </div>
 
       <div className="mx-auto mt-12 max-w-3xl" data-reveal>
         <div className="card divide-y divide-ink-200 overflow-hidden">
           {items.map((it) => (
             <details
-              key={it.q}
+              key={it.qKey}
               className="group p-5 sm:p-6 [&_summary::-webkit-details-marker]:hidden"
             >
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[15px] font-medium text-ink-950">
-                <span>{it.q}</span>
+                <span data-i18n={it.qKey}>{it.q}</span>
                 <span
                   aria-hidden="true"
                   className="inline-flex h-7 w-7 flex-none items-center justify-center rounded-full border border-ink-200 text-ink-500 transition-transform duration-200 group-open:rotate-45"
@@ -1510,7 +1670,7 @@ function Faq() {
                   <IconPlus />
                 </span>
               </summary>
-              <p className="mt-3 max-w-2xl text-[14.5px] leading-[1.65] text-ink-600">
+              <p className="mt-3 max-w-2xl text-[14.5px] leading-[1.65] text-ink-600" data-i18n={it.aKey}>
                 {it.a}
               </p>
             </details>
@@ -1541,29 +1701,31 @@ function FinalCta() {
           <div className="mx-auto mb-7 flex justify-center">
             <AtlasMark className="h-12 w-12" />
           </div>
-          <h2 className="mx-auto max-w-2xl text-balance text-3xl font-medium leading-[1.1] tracking-tight sm:text-4xl lg:text-[2.75rem]">
+          <h2 className="mx-auto max-w-2xl text-balance text-3xl font-medium leading-[1.1] tracking-tight sm:text-4xl lg:text-[2.75rem]" data-i18n="final.title" suppressHydrationWarning>
             Arrêtez de gérer vos fournisseurs IA.
           </h2>
-          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-[1.6] text-ink-400 sm:text-base">
+          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-[1.6] text-ink-400 sm:text-base" data-i18n="final.subtitle" suppressHydrationWarning>
             Atlas s&apos;occupe du routage, des quotas, du Smart Fallback et de
             l&apos;orchestration. Vous développez. Atlas fait le reste.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <a
               href="https://app.atlasflash.com/signin"
+              data-i18n="final.cta.primary"
               className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-ink-50 px-5 text-[14px] font-medium text-ink-950 transition-colors hover:bg-ink-100"
-            >
+             suppressHydrationWarning>
               Créer mon compte gratuitement
               <IconArrowRight />
             </a>
             <a
               href="https://app.atlasflash.com/signin"
+              data-i18n="final.cta.secondary"
               className="inline-flex h-11 items-center justify-center rounded-md border border-ink-50/20 bg-transparent px-5 text-[14px] font-medium text-ink-50 transition-colors hover:bg-ink-50/10"
-            >
+             suppressHydrationWarning>
               Se connecter
             </a>
           </div>
-          <p className="mt-6 text-[12.5px] text-ink-500">
+          <p className="mt-6 text-[12.5px] text-ink-500" data-i18n="final.trust" suppressHydrationWarning>
             Sans carte bancaire · Compte créé en moins d&apos;une minute
           </p>
         </div>
@@ -1579,41 +1741,33 @@ function FinalCta() {
 function SiteFooter() {
   const cols = [
     {
+      titleKey: "footer.col.atlas",
       title: "Atlas",
       links: [
-        { label: "Connexion", href: "https://app.atlasflash.com/signin" },
-        { label: "Créer un compte", href: "https://app.atlasflash.com/signin" },
+        { key: "footer.link.signin", label: "Connexion", href: "https://app.atlasflash.com/signin" },
+        { key: "footer.link.signup", label: "Créer un compte", href: "https://app.atlasflash.com/signin" },
       ],
     },
     {
+      titleKey: "footer.col.product",
       title: "Produit",
       links: [
-        { label: "Smart Routing", href: "#features" },
-        { label: "Smart Fallback", href: "#features" },
-        { label: "Compatible OpenAI", href: "#tools" },
+        { key: "footer.link.compatible", label: "Compatible OpenAI", href: "#tools" },
       ],
     },
     {
+      titleKey: "footer.col.legal",
       title: "Légal",
       links: [
-        { label: "Conditions", href: "/terms" },
-        { label: "Confidentialité", href: "/privacy" },
-        { label: "Mentions légales", href: "/mentions-legales" },
+        { key: "footer.link.terms", label: "Conditions", href: "/terms" },
+        { key: "footer.link.privacy", label: "Confidentialité", href: "/privacy" },
+        { key: "footer.link.mentions", label: "Mentions légales", href: "/mentions-legales" },
       ],
     },
     {
-      // Il manquait toute façon d'écrire à quelqu'un : les trois autres
-      // colonnes mènent au produit ou à des textes, aucune à un humain.
-      //
-      // Adresse et téléphone sont lus dans EDITEUR, la même source que les
-      // mentions légales, et non recopiés : deux exemplaires d'un numéro, c'est
-      // un numéro périmé le jour où il change. Ils y figurent déjà — la LCEN
-      // les impose pour un entrepreneur individuel — donc les afficher ici ne
-      // divulgue rien de neuf, cela les rend seulement plus visibles.
       title: "Contact",
       links: [
         { label: EDITEUR.email, href: `mailto:${EDITEUR.email}` },
-        // `tel:` retire les espaces : un composeur de téléphone n'en veut pas.
         { label: EDITEUR.telephone, href: `tel:${EDITEUR.telephone.replace(/\s/g, "")}` },
       ],
     },
@@ -1635,21 +1789,22 @@ function SiteFooter() {
                 Atlas
               </span>
             </a>
-            <p className="mt-4 max-w-xs text-[13.5px] leading-[1.6] text-ink-500">
+            <p className="mt-4 max-w-xs text-[13.5px] leading-[1.6] text-ink-500" data-i18n="footer.tagline" suppressHydrationWarning>
               Le pilote automatique de vos appels IA. Une seule API, des
               centaines de modèles, gratuit d&apos;abord.
             </p>
           </div>
           {cols.map((c) => (
-            <div key={c.title}>
-              <p className="text-[12px] font-medium uppercase tracking-[0.16em] text-ink-500">
+            <div key={c.titleKey}>
+              <p className="text-[12px] font-medium uppercase tracking-[0.16em] text-ink-500" data-i18n={c.titleKey}>
                 {c.title}
               </p>
               <ul className="mt-4 space-y-2.5">
                 {c.links.map((l) => (
-                  <li key={l.label}>
+                  <li key={l.key}>
                     <a
                       href={l.href}
+                      data-i18n={l.key}
                       className="text-[14px] text-ink-700 transition-colors hover:text-ink-950"
                     >
                       {l.label}
@@ -1662,7 +1817,7 @@ function SiteFooter() {
         </div>
 
         <div className="mt-12 flex flex-col items-start justify-between gap-3 border-t border-ink-200 pt-6 text-[12.5px] text-ink-500 sm:flex-row sm:items-center">
-          <p>© {new Date().getFullYear()} Atlas. Tous droits réservés.</p>
+          <p data-i18n="footer.copyright" suppressHydrationWarning>© {new Date().getFullYear()} Atlas. Tous droits réservés.</p>
           <p>
             <a
               href="https://app.atlasflash.com"
