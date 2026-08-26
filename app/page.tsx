@@ -304,25 +304,23 @@ function LanguageSelector() {
         data-lang-menu
         data-open="false"
         role="menu"
-        className="absolute right-0 top-full z-50 mt-2 hidden w-44 flex-col gap-0.5 p-1 data-[open=true]:flex"
+        className="lang-menu absolute right-0 top-full z-50 mt-2 hidden w-44 flex-col gap-0.5 data-[open=true]:flex"
       >
-        <div className="lang-menu flex flex-col gap-0.5">
-          {LANGS.map((l) => (
-            <button
-              key={l.code}
-              type="button"
-              data-lang-option={l.code}
-              role="menuitemradio"
-              aria-checked="false"
-              className="lang-option"
-            >
-              <span>{l.native}</span>
-              <span className="text-[11px] uppercase tracking-wider text-ink-400">
-                {l.short}
-              </span>
-            </button>
-          ))}
-        </div>
+        {LANGS.map((l) => (
+          <button
+            key={l.code}
+            type="button"
+            data-lang-option={l.code}
+            role="menuitemradio"
+            aria-checked="false"
+            className="lang-option"
+          >
+            <span>{l.native}</span>
+            <span className="text-[11px] uppercase tracking-wider text-ink-400">
+              {l.short}
+            </span>
+          </button>
+        ))}
       </div>
     </div>
   );
