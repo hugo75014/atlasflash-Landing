@@ -1133,7 +1133,7 @@ function Pricing() {
       price: "0 €",
       cadence: "à vie",
       description:
-        "Pas un essai. Crée ta clé Atlas, colle-la dans Cursor, VS Code ou Cline, tu travailles. Jusqu'à 10 fournisseurs branchés — de quoi construire un projet entier.",
+        "Pas un essai. Crée ta clé Atlas, colle-la dans Cursor, VS Code ou Cline, tu travailles. Jusqu'à 10 fournisseurs branchés, et 1 outil CLI installé en un clic — de quoi construire un projet entier.",
       cta: { label: "Commencer gratuitement", href: "https://app.atlasflash.com/signin", variant: "secondary" as const },
       highlight: false,
     },
@@ -1178,6 +1178,12 @@ function Pricing() {
       label: "Connexions fournisseur",
       free: "10",
       pro: "50",
+      unlimited: <span className="font-semibold text-ink-950 dark:text-ink-50">illimité</span>,
+    },
+    {
+      label: "Outils CLI installés en un clic",
+      free: "1",
+      pro: "5",
       unlimited: <span className="font-semibold text-ink-950 dark:text-ink-50">illimité</span>,
     },
     {
