@@ -43,6 +43,7 @@ attachments/
 .home/
 .deploy-src/
 .scripts/
+.deploy-src/
 add_shw.py
 snap*.js
 preview-build/
