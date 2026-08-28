@@ -98,9 +98,9 @@
     --ambient-teal:    16 185 129;  /* #10B981 */
     --ambient-indigo:  99 102 241;  /* #6366F1 */
     --ambient-cyan:    56 189 248;  /* #38BDF8 */
-    --ambient-teal-a:  0.32;        /* visible teal glow */
-    --ambient-indigo-a: 0.24;
-    --ambient-cyan-a:  0.10;
+    --ambient-teal-a:  0.20;        /* toned-down teal wash */
+    --ambient-indigo-a: 0.14;       /* toned-down indigo wash */
+    --ambient-cyan-a:  0.08;        /* horizon band (unchanged) */
 
     /* Grid line on dark — slightly cyan-tinted so it reads as ambient, not neutral */
     --grid-line: 180 220 255;
@@ -332,10 +332,12 @@
     inset: 0;
     pointer-events: none;
     z-index: 0;
+    /* The wash uses lower alpha than the body aurora (×0.7) so it just lifts
+       the hero, never overpowers it. The middle horizon is also dimmer. */
     background-image:
-      radial-gradient(ellipse 50% 45% at 25% 30%, rgb(var(--ambient-teal) / var(--ambient-teal-a)) 0%, transparent 60%),
-      radial-gradient(ellipse 40% 35% at 75% 35%, rgb(var(--ambient-indigo) / var(--ambient-indigo-a)) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 30% at 50% 75%, rgb(var(--ambient-cyan) / var(--ambient-cyan-a)) 0%, transparent 60%);
+      radial-gradient(ellipse 50% 45% at 25% 30%, rgb(var(--ambient-teal) / calc(var(--ambient-teal-a) * 0.7)) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 35% at 75% 35%, rgb(var(--ambient-indigo) / calc(var(--ambient-indigo-a) * 0.7)) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 30% at 50% 75%, rgb(var(--ambient-cyan) / calc(var(--ambient-cyan-a) * 0.6)) 0%, transparent 60%);
   }
 
   /* A single-color ambient spot — useful behind a single CTA. */
