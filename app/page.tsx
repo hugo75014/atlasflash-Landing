@@ -835,6 +835,9 @@ function TopNav() {
 function Hero() {
   return (
     <section className="relative overflow-hidden">
+      {/* Localized ambient glow — sits on top of the body aurora to give the
+         hero its own focal light. Pointer-events disabled so it never blocks clicks. */}
+      <div aria-hidden="true" className="ambient-glow" />
       {/* Soft grid background */}
       <div
         aria-hidden="true"
