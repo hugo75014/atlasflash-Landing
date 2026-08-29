@@ -14,8 +14,6 @@ function T({ k, children }: { k: string; children?: React.ReactNode }) {
   );
 }
 
-import { EDITEUR } from "./legal/shared";
-
 export const metadata: Metadata = {
   title: "Atlas — Une seule API. Des centaines de modèles IA. Gratuit d'abord.",
   description:
@@ -1472,16 +1470,14 @@ function Pricing() {
       unlimited: <span className="font-semibold text-ink-950 dark:text-ink-50" data-i18n="pricing.row.3.unlimited" suppressHydrationWarning>illimité</span>,
     },
     {
-<<<<<<< HEAD
+      labelKey: "pricing.row.cli",
       label: "Outils CLI installés en un clic",
       free: "1",
       pro: "5",
-      unlimited: <span className="font-semibold text-ink-950 dark:text-ink-50">illimité</span>,
+      unlimited: <span className="font-semibold text-ink-950 dark:text-ink-50" data-i18n="pricing.row.3.unlimited" suppressHydrationWarning>illimité</span>,
     },
     {
-=======
       labelKey: "pricing.row.4",
->>>>>>> aaeec1e (redesign + i18n: 5 languages, dark mode, new design system)
       label: "Plafond de tokens / requêtes",
       free: <span className="text-ink-500" data-i18n="pricing.row.4.any" suppressHydrationWarning>aucun</span>,
       pro: <span className="text-ink-500" data-i18n="pricing.row.4.any" suppressHydrationWarning>aucun</span>,
@@ -1766,10 +1762,20 @@ function SiteFooter() {
       ],
     },
     {
+      titleKey: "footer.col.contact",
       title: "Contact",
       links: [
-        { label: EDITEUR.email, href: `mailto:${EDITEUR.email}` },
-        { label: EDITEUR.telephone, href: `tel:${EDITEUR.telephone.replace(/\s/g, "")}` },
+        // Pas de `key` en dictionnaire i18n pour ces deux liens : l'adresse et
+        // le numéro sont des valeurs dynamiques (EDITEUR), jamais du texte à
+        // traduire. Le script de swap ignore silencieusement une clé absente
+        // du dictionnaire (voir `apply()` dans layout.tsx), donc `data-i18n`
+        // reste posé pour la cohérence du composant sans jamais rien écraser.
+        { key: "footer.link.email", label: EDITEUR.email, href: `mailto:${EDITEUR.email}` },
+        {
+          key: "footer.link.phone",
+          label: EDITEUR.telephone,
+          href: `tel:${EDITEUR.telephone.replace(/\s/g, "")}`,
+        },
       ],
     },
   ];
