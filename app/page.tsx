@@ -1685,14 +1685,14 @@ function Faq() {
 function FinalCta() {
   return (
     <section className="container-page pb-24 pt-12 sm:pb-32 sm:pt-16">
-      <div className="relative overflow-hidden rounded-2xl border border-ink-200 bg-ink-950 text-ink-50">
+      <div className="relative overflow-hidden rounded-2xl border border-ink-200 bg-surface-2 text-ink-900 dark:text-ink-50">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 opacity-[0.18] grid-bg dark:opacity-[0.4]"
+          className="pointer-events-none absolute inset-0 opacity-[0.05] grid-bg dark:opacity-[0.4]"
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -top-24 left-1/2 h-72 w-[42rem] -translate-x-1/2 rounded-full bg-ink-50/10 blur-3xl"
+          className="pointer-events-none absolute -top-24 left-1/2 h-72 w-[42rem] -translate-x-1/2 rounded-full bg-ink-950/5 blur-3xl dark:bg-ink-50/10"
         />
         <div className="relative px-6 py-16 text-center sm:px-10 sm:py-20" data-reveal>
           <div className="mx-auto mb-7 flex justify-center">
@@ -1701,7 +1701,7 @@ function FinalCta() {
           <h2 className="mx-auto max-w-2xl text-balance text-3xl font-medium leading-[1.1] tracking-tight sm:text-4xl lg:text-[2.75rem]" data-i18n="final.title" suppressHydrationWarning>
             Arrêtez de gérer vos fournisseurs IA.
           </h2>
-          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-[1.6] text-ink-400 sm:text-base" data-i18n="final.subtitle" suppressHydrationWarning>
+          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-[1.6] text-ink-600 dark:text-ink-400 sm:text-base" data-i18n="final.subtitle" suppressHydrationWarning>
             Atlas s&apos;occupe du routage, des quotas, du Smart Fallback et de
             l&apos;orchestration. Vous développez. Atlas fait le reste.
           </p>
@@ -1709,7 +1709,7 @@ function FinalCta() {
             <a
               href="https://app.atlasflash.com/signin"
               data-i18n="final.cta.primary"
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-ink-50 px-5 text-[14px] font-medium text-ink-950 transition-colors hover:bg-ink-100"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-ink-950 px-5 text-[14px] font-medium text-ink-50 transition-colors hover:bg-ink-800 dark:bg-ink-50 dark:text-ink-950 dark:hover:bg-ink-100"
              suppressHydrationWarning>
               Créer mon compte gratuitement
               <IconArrowRight />
@@ -1717,7 +1717,7 @@ function FinalCta() {
             <a
               href="https://app.atlasflash.com/signin"
               data-i18n="final.cta.secondary"
-              className="inline-flex h-11 items-center justify-center rounded-md border border-ink-50/20 bg-transparent px-5 text-[14px] font-medium text-ink-50 transition-colors hover:bg-ink-50/10"
+              className="inline-flex h-11 items-center justify-center rounded-md border border-ink-950/20 bg-transparent px-5 text-[14px] font-medium text-ink-900 transition-colors hover:bg-ink-950/5 dark:border-ink-50/20 dark:text-ink-50 dark:hover:bg-ink-50/10"
              suppressHydrationWarning>
               Se connecter
             </a>
