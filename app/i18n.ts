@@ -154,6 +154,10 @@ const fr: Record<string, string> = {
   "pricing.row.4.any": "aucun",
   "pricing.row.5": "Routage intelligent + repli automatique",
   "pricing.row.6": "Format OpenAI /v1/chat/completions",
+  "pricing.row.7": "Outils CLI installés en un clic",
+  "pricing.row.7.free": "1",
+  "pricing.row.7.pro": "5",
+  "pricing.row.7.unlimited": "illimité",
   "pricing.source":
     "Source unique : control-plane/src/plans/catalogue.ts. Aucun plafond de tokens, jamais.",
 
@@ -331,6 +335,10 @@ const en: Record<string, string> = {
   "pricing.row.4.any": "none",
   "pricing.row.5": "Smart routing + automatic failover",
   "pricing.row.6": "OpenAI /v1/chat/completions format",
+  "pricing.row.7": "CLI tools installed in one click",
+  "pricing.row.7.free": "1",
+  "pricing.row.7.pro": "5",
+  "pricing.row.7.unlimited": "unlimited",
   "pricing.source":
     "Single source of truth: control-plane/src/plans/catalogue.ts. No token caps. Ever.",
 
@@ -505,6 +513,10 @@ const es: Record<string, string> = {
   "pricing.row.4.any": "ninguno",
   "pricing.row.5": "Enrutamiento inteligente + conmutación automática",
   "pricing.row.6": "Formato OpenAI /v1/chat/completions",
+  "pricing.row.7": "Herramientas CLI instaladas con un clic",
+  "pricing.row.7.free": "1",
+  "pricing.row.7.pro": "5",
+  "pricing.row.7.unlimited": "ilimitado",
   "pricing.source":
     "Fuente única: control-plane/src/plans/catalogue.ts. Sin límite de tokens. Nunca.",
 
@@ -679,6 +691,10 @@ const pt: Record<string, string> = {
   "pricing.row.4.any": "nenhum",
   "pricing.row.5": "Roteamento inteligente + comutação automática",
   "pricing.row.6": "Formato OpenAI /v1/chat/completions",
+  "pricing.row.7": "Ferramentas CLI instaladas com um clique",
+  "pricing.row.7.free": "1",
+  "pricing.row.7.pro": "5",
+  "pricing.row.7.unlimited": "ilimitado",
   "pricing.source":
     "Fonte única: control-plane/src/plans/catalogue.ts. Sem limite de tokens. Nunca.",
 
@@ -853,6 +869,10 @@ const hi: Record<string, string> = {
   "pricing.row.4.any": "कोई नहीं",
   "pricing.row.5": "Smart routing + स्वचालित failover",
   "pricing.row.6": "OpenAI /v1/chat/completions फ़ॉर्मेट",
+  "pricing.row.7": "एक क्लिक में इंस्टॉल होने वाले CLI टूल्स",
+  "pricing.row.7.free": "1",
+  "pricing.row.7.pro": "5",
+  "pricing.row.7.unlimited": "असीमित",
   "pricing.source":
     "एकल स्रोत: control-plane/src/plans/catalogue.ts. कोई token सीमा नहीं. कभी नहीं.",
 

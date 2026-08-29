@@ -14,8 +14,6 @@ function T({ k, children }: { k: string; children?: React.ReactNode }) {
   );
 }
 
-import { EDITEUR } from "./legal/shared";
-
 export const metadata: Metadata = {
   title: "Atlas — Une seule API. Des centaines de modèles IA. Gratuit d'abord.",
   description:
@@ -1472,16 +1470,7 @@ function Pricing() {
       unlimited: <span className="font-semibold text-ink-950 dark:text-ink-50" data-i18n="pricing.row.3.unlimited" suppressHydrationWarning>illimité</span>,
     },
     {
-<<<<<<< HEAD
-      label: "Outils CLI installés en un clic",
-      free: "1",
-      pro: "5",
-      unlimited: <span className="font-semibold text-ink-950 dark:text-ink-50">illimité</span>,
-    },
-    {
-=======
       labelKey: "pricing.row.4",
->>>>>>> aaeec1e (redesign + i18n: 5 languages, dark mode, new design system)
       label: "Plafond de tokens / requêtes",
       free: <span className="text-ink-500" data-i18n="pricing.row.4.any" suppressHydrationWarning>aucun</span>,
       pro: <span className="text-ink-500" data-i18n="pricing.row.4.any" suppressHydrationWarning>aucun</span>,
@@ -1500,6 +1489,21 @@ function Pricing() {
       free: <CheckCell />,
       pro: <CheckCell />,
       unlimited: <CheckCell />,
+    },
+    {
+      // Row 7 — added on top of the rebased remote content (was in
+      // commit 31d35f9 "feat(pricing): ajoute la ligne outils CLI…",
+      // lost during the rebase). Positioned last so the i18n keys for
+      // existing rows don't have to be renumbered.
+      labelKey: "pricing.row.7",
+      label: "Outils CLI installés en un clic",
+      free: <span data-i18n="pricing.row.7.free" suppressHydrationWarning>1</span>,
+      pro: <span data-i18n="pricing.row.7.pro" suppressHydrationWarning>5</span>,
+      unlimited: (
+        <span className="font-semibold text-ink-950 dark:text-ink-50" data-i18n="pricing.row.7.unlimited" suppressHydrationWarning>
+          illimité
+        </span>
+      ),
     },
   ];
 
@@ -1740,7 +1744,11 @@ function FinalCta() {
 /* ------------------------------------------------------------------ */
 
 function SiteFooter() {
-  const cols = [
+  const cols: {
+    titleKey?: string;
+    title: string;
+    links: { key?: string; label: string; href: string }[];
+  }[] = [
     {
       titleKey: "footer.col.atlas",
       title: "Atlas",
@@ -1796,16 +1804,19 @@ function SiteFooter() {
             </p>
           </div>
           {cols.map((c) => (
-            <div key={c.titleKey}>
-              <p className="text-[12px] font-medium uppercase tracking-[0.16em] text-ink-500" data-i18n={c.titleKey}>
+            <div key={c.titleKey ?? c.title}>
+              <p
+                className="text-[12px] font-medium uppercase tracking-[0.16em] text-ink-500"
+                {...(c.titleKey ? { "data-i18n": c.titleKey } : {})}
+              >
                 {c.title}
               </p>
               <ul className="mt-4 space-y-2.5">
-                {c.links.map((l) => (
-                  <li key={l.key}>
+                {c.links.map((l, i) => (
+                  <li key={l.key ?? `${c.titleKey}-${i}`}>
                     <a
                       href={l.href}
-                      data-i18n={l.key}
+                      {...(l.key ? { "data-i18n": l.key } : {})}
                       className="text-[14px] text-ink-700 transition-colors hover:text-ink-950"
                     >
                       {l.label}
